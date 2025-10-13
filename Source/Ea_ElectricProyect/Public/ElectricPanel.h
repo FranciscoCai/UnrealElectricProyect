@@ -44,8 +44,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
 	TSubclassOf<AElectricCharacter> ElectricCharacterClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Electric")
-	bool bSpawnAtEnd = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
+	bool bSpawnUp = true;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
+	bool bSpawnDown = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
+	bool bSpawnRight = true;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
+	bool bSpawnLeft = false;
 
 	// Input mappings, editables en Blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
@@ -62,7 +69,7 @@ public:
 
 
 private:
-	void SpawnAndPossessCharacter(int32 SplineIndex);
+	void SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart);
 	
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;
 
@@ -75,4 +82,5 @@ private:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputRight();
 };
+
 

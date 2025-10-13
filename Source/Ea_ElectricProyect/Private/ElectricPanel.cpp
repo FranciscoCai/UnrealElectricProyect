@@ -65,18 +65,18 @@ void AElectricPanel::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	{
 		EnhancedInput->BindAction(MoveUpAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputUp);
 		EnhancedInput->BindAction(MoveDownAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputDown);
-		EnhancedInput->BindAction(MoveLeftAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputLeft);
 		EnhancedInput->BindAction(MoveRightAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputRight);
+		EnhancedInput->BindAction(MoveLeftAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputLeft);
 	}
 }
 
 
-void AElectricPanel::OnInputUp()    { SpawnAndPossessCharacter(0); }
-void AElectricPanel::OnInputDown()  { SpawnAndPossessCharacter(1); }
-void AElectricPanel::OnInputLeft()  { SpawnAndPossessCharacter(2); }
-void AElectricPanel::OnInputRight() { SpawnAndPossessCharacter(3); }
+void AElectricPanel::OnInputUp()    { SpawnAndPossessCharacter(0, bSpawnUp); }
+void AElectricPanel::OnInputDown()  { SpawnAndPossessCharacter(1, bSpawnDown); }
+void AElectricPanel::OnInputRight() { SpawnAndPossessCharacter(2, bSpawnRight); }
+void AElectricPanel::OnInputLeft()  { SpawnAndPossessCharacter(3, bSpawnLeft); }
 
-void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex)
+void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart)
 {
 	if (GEngine)
 	{
@@ -94,7 +94,7 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex)
 	if (!SplineComp) return;
 
 	// Elegir el punto: 0 para inicio, último índice para final
-	int32 PointIndex = bSpawnAtEnd ? SplineComp->GetNumberOfSplinePoints() - 1 : 0;
+	int32 PointIndex = bSpawnAtStart ? SplineComp->GetNumberOfSplinePoints() - 1 : 0;
 	FVector SpawnLocation = SplineComp->GetLocationAtSplinePoint(PointIndex, ESplineCoordinateSpace::World);
 	FRotator SpawnRotation = SplineComp->GetRotationAtSplinePoint(PointIndex, ESplineCoordinateSpace::World);
 
@@ -103,7 +103,7 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex)
 	AElectricCharacter* NewCharacter = GetWorld()->SpawnActor<AElectricCharacter>(ElectricCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
 
 	float InitialDistance = 1.0f;
-	if (bSpawnAtEnd && SplineComp)
+	if (bSpawnAtStart && SplineComp)
 	{
 		InitialDistance = SplineComp->GetSplineLength();
 		NewCharacter->bReverseSplineDirection = true;
