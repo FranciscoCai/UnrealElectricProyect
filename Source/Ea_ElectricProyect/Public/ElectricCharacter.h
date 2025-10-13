@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "InputMappingContext.h"
+#include "InputAction.h"
 #include "ElectricCharacter.generated.h"
 
 class UInputAction;

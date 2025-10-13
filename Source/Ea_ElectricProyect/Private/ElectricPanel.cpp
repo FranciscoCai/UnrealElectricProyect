@@ -93,22 +93,16 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtSt
 	USplineComponent* SplineComp = SplineActor->FindComponentByClass<USplineComponent>();
 	if (!SplineComp) return;
 
-	// Elegir el punto: 0 para inicio, último índice para final
-	int32 PointIndex = bSpawnAtStart ? SplineComp->GetNumberOfSplinePoints() - 1 : 0;
-	FVector SpawnLocation = SplineComp->GetLocationAtSplinePoint(PointIndex, ESplineCoordinateSpace::World);
-	FRotator SpawnRotation = SplineComp->GetRotationAtSplinePoint(PointIndex, ESplineCoordinateSpace::World);
+	float InitialDistance = bSpawnAtStart ? 0.0f : SplineComp->GetSplineLength();
+	FVector SpawnLocation = SplineComp->GetLocationAtDistanceAlongSpline(InitialDistance, ESplineCoordinateSpace::World);
+	FRotator SpawnRotation = SplineComp->GetRotationAtDistanceAlongSpline(InitialDistance, ESplineCoordinateSpace::World);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 	AElectricCharacter* NewCharacter = GetWorld()->SpawnActor<AElectricCharacter>(ElectricCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
 
-	float InitialDistance = 1.0f;
-	if (bSpawnAtStart && SplineComp)
-	{
-		InitialDistance = SplineComp->GetSplineLength();
-		NewCharacter->bReverseSplineDirection = true;
-	}
 	NewCharacter->SetSpline(SplineComp, InitialDistance);
+	NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
 
 	if (NewCharacter)
 	{
