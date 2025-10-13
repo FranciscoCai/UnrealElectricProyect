@@ -3,6 +3,10 @@
 
 #include "ElectricCharacter.h"
 #include "Components/SplineComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerController.h"
+#include "InputMappingContext.h"
+#include "InputAction.h"
 
 // Sets default values
 AElectricCharacter::AElectricCharacter()
@@ -16,7 +20,19 @@ AElectricCharacter::AElectricCharacter()
 void AElectricCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	if (PC)
+	{
+		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
+		{
+			if (UEnhancedInputLocalPlayerSubsystem* LocalSubsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+			{
+				// Aseg¨²rate de tener una variable UPROPERTY para tu MappingContext
+				LocalSubsystem->AddMappingContext(ElectricMoveMappingContext, 0);
+			}
+		}
+	}
 }
 
 // Called every frame
@@ -24,26 +40,28 @@ void AElectricCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bMovingOnSpline && SplineToFollow)
+	if (MoveDirection != 0.f && SplineToFollow)
 	{
-		const float SplineLength = SplineToFollow->GetSplineLength();
-		float Delta = SplineMoveSpeed * DeltaTime;
+		float Direction = MoveDirection;
+		// Si bReverseSplineDirection es true (positivo), invierte la direcci¨®n
 		if (bReverseSplineDirection)
 		{
-			Delta = -Delta;
+			Direction *= -1.f;
 		}
+
+		const float SplineLength = SplineToFollow->GetSplineLength();
+		float Delta = SplineMoveSpeed * DeltaTime * Direction;
 		CurrentDistanceOnSpline += Delta;
 
-		// Limitar el rango
 		if (CurrentDistanceOnSpline > SplineLength)
 		{
 			CurrentDistanceOnSpline = SplineLength;
-			bMovingOnSpline = false;
+			MoveDirection = 0.f;
 		}
 		else if (CurrentDistanceOnSpline < 0.f)
 		{
 			CurrentDistanceOnSpline = 0.f;
-			bMovingOnSpline = false;
+			MoveDirection = 0.f;
 		}
 
 		FVector NewLocation = SplineToFollow->GetLocationAtDistanceAlongSpline(CurrentDistanceOnSpline, ESplineCoordinateSpace::World);
@@ -57,7 +75,11 @@ void AElectricCharacter::Tick(float DeltaTime)
 void AElectricCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInput->BindAction(MoveUpAction, ETriggerEvent::Triggered, this, &AElectricCharacter::OnInputUp);
+		EnhancedInput->BindAction(MoveDownAction, ETriggerEvent::Triggered, this, &AElectricCharacter::OnInputDown);
+	}
 }
 
 void AElectricCharacter::SetSpline(USplineComponent* InSpline, float InitialDistance)
@@ -73,5 +95,17 @@ void AElectricCharacter::SetSpline(USplineComponent* InSpline, float InitialDist
 		FRotator StartRotation = SplineToFollow->GetRotationAtDistanceAlongSpline(InitialDistance, ESplineCoordinateSpace::World);
 		SetActorLocationAndRotation(StartLocation, StartRotation);
 	}
+}
+
+void AElectricCharacter::OnInputUp()
+{
+    MoveDirection = 1.f; // Mover hacia adelante
+    UE_LOG(LogTemp, Warning, TEXT("OnInputUp: Mover hacia adelante"));
+}
+
+void AElectricCharacter::OnInputDown()
+{
+    MoveDirection = -1.f; // Mover hacia atr¨¢s
+    UE_LOG(LogTemp, Warning, TEXT("OnInputDown: Mover hacia atr¨¢s"));
 }
 

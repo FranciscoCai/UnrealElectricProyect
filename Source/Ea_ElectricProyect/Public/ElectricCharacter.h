@@ -6,6 +6,9 @@
 #include "GameFramework/Pawn.h"
 #include "ElectricCharacter.generated.h"
 
+class UInputAction;
+class UInputMappingContext;
+class UEnhancedInputLocalPlayerSubsystem;
 class USplineComponent;
 
 UCLASS()
@@ -36,10 +39,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
 	bool bReverseSplineDirection = false;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputMappingContext* ElectricMoveMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveUpAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveDownAction;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	float MoveDirection = 0.f;
+
 private:
 	UPROPERTY()
 	USplineComponent* SplineToFollow = nullptr;
 
 	float CurrentDistanceOnSpline = 0.f;
 	bool bMovingOnSpline = false;
+
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInputUp();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInputDown();
 };

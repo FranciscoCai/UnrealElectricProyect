@@ -1,9 +1,11 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Camera/CameraComponent.h" 
+#include "MainCamera.h"
 #include "Ea_ElectricProyectPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -35,10 +37,17 @@ protected:
 	/** Pointer to the mobile controls widget */
 	TObjectPtr<UUserWidget> MobileControlsWidget;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
+	AMainCamera* CameraActor;
+
 	/** Gameplay initialization */
 	virtual void BeginPlay() override;
 
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
 
+public:
+	// Añade esta línea en la sección pública de tu clase
+	virtual void OnPossess(APawn* InPawn) override;
+	virtual void Tick(float DeltaTime) override;
 };

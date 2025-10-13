@@ -7,6 +7,8 @@
 #include "InputMappingContext.h"
 #include "Blueprint/UserWidget.h"
 #include "Ea_ElectricProyect.h"
+#include "EngineUtils.h" 
+#include "Camera/CameraActor.h"
 #include "Widgets/Input/SVirtualJoystick.h"
 
 void AEa_ElectricProyectPlayerController::BeginPlay()
@@ -59,3 +61,33 @@ void AEa_ElectricProyectPlayerController::SetupInputComponent()
 		}
 	}
 }
+
+void AEa_ElectricProyectPlayerController::OnPossess(APawn* InPawn)
+{
+    Super::OnPossess(InPawn);
+	for (TActorIterator<AMainCamera> It(GetWorld()); It; ++It)
+	{
+		CameraActor = *It; // Asigna la primera c¨¢mara AMainCamera encontrada
+		break;
+	}
+	if (CameraActor)
+	{
+		SetViewTarget(CameraActor);
+	}
+
+	//if (CameraActor)
+	//{
+	//	CameraActor->PawnToFollow = InPawn;
+	//	SetViewTarget(CameraActor);
+	//}
+ //   if (CameraActor)
+ //   {
+ //       CameraActor->PawnToFollow = InPawn;
+ //       SetViewTarget(CameraActor);
+ //   }
+}
+
+void AEa_ElectricProyectPlayerController::Tick(float DeltaTime)
+   {
+       Super::Tick(DeltaTime);
+   }

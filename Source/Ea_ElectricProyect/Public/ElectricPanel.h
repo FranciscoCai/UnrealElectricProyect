@@ -60,6 +60,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* MoveRightAction;
 
+
 private:
 	void SpawnAndPossessCharacter(int32 SplineIndex);
 	

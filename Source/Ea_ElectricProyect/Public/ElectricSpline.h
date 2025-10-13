@@ -26,6 +26,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Componente spline visible y editable en el editor
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Electric")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
 	USplineComponent* SplineComponent;
 };

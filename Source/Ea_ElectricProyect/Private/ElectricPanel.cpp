@@ -13,6 +13,9 @@
 #include "InputAction.h"
 #include "Logging/LogMacros.h"
 #include "Engine/Engine.h"
+#include "EngineUtils.h"
+#include "Camera/CameraActor.h"
+
 // Sets default values
 AElectricPanel::AElectricPanel()
 {
@@ -32,7 +35,6 @@ void AElectricPanel::BeginPlay()
 	{
 		PC->Possess(this);
 	}
-
 	// Asignar el Mapping Context
 	if (PC)
 	{
@@ -113,8 +115,8 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex)
 		APlayerController* PC = Cast<APlayerController>(GetController());
 		if (PC)
 		{
-			UnPossessed();
 			PC->Possess(NewCharacter);
+			UnPossessed();
 		}
 	}
 }
