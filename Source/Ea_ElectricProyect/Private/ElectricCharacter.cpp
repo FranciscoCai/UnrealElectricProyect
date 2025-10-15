@@ -79,8 +79,10 @@ void AElectricCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInput->BindAction(MoveUpAction, ETriggerEvent::Triggered, this, &AElectricCharacter::OnInputUp);
-		EnhancedInput->BindAction(MoveDownAction, ETriggerEvent::Triggered, this, &AElectricCharacter::OnInputDown);
+		EnhancedInput->BindAction(MoveUpAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputGoUp);
+		EnhancedInput->BindAction(MoveDownAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputBackUp);
+		EnhancedInput->BindAction(MoveUpAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputGoDown);
+		EnhancedInput->BindAction(MoveDownAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputBackDown);
 	}
 }
 
@@ -99,15 +101,28 @@ void AElectricCharacter::SetSpline(USplineComponent* InSpline, float InitialDist
 	}
 }
 
-void AElectricCharacter::OnInputUp()
+void AElectricCharacter::OnInputGoUp()
 {
     MoveDirection = 1.f; // Mover hacia adelante
-    UE_LOG(LogTemp, Warning, TEXT("OnInputUp: Mover hacia adelante"));
 }
 
-void AElectricCharacter::OnInputDown()
+void AElectricCharacter::OnInputBackUp()
 {
     MoveDirection = -1.f; // Mover hacia atr¨¢s
-    UE_LOG(LogTemp, Warning, TEXT("OnInputDown: Mover hacia atr¨¢s"));
+}
+void AElectricCharacter::OnInputGoDown()
+{
+	if (MoveDirection > 0)
+	{
+		MoveDirection = 0;
+    }
+}
+
+void AElectricCharacter::OnInputBackDown()
+{
+	if (MoveDirection < 0)
+	{
+		MoveDirection = 0;
+	}
 }
 

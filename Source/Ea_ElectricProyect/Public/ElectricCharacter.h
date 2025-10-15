@@ -60,7 +60,11 @@ private:
 	bool bMovingOnSpline = false;
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
-	void OnInputUp();
+	void OnInputGoUp();
 	UFUNCTION(BlueprintCallable, Category = "Input")
-	void OnInputDown();
+	void OnInputBackUp();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInputGoDown();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInputBackDown();
 };
