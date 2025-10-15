@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ElectricPanelStation.h"
 #include "ElectricSpline.generated.h"
 
 class USplineComponent;
@@ -16,6 +17,11 @@ class EA_ELECTRICPROYECT_API AElectricSpline : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AElectricSpline();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
+	AElectricPanelStation* PanelStationStart;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
+	AElectricPanelStation* PanelStationEnd;
 
 protected:
 	// Called when the game starts or when spawned

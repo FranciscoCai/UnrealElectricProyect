@@ -71,6 +71,7 @@ void AElectricCharacter::Tick(float DeltaTime)
 
 		SetActorLocationAndRotation(NewLocation, NewRotation);
 	}
+
 }
 
 // Called to bind functionality to input
@@ -89,7 +90,6 @@ void AElectricCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 void AElectricCharacter::SetSpline(USplineComponent* InSpline, float InitialDistance)
 {
 	SplineToFollow = InSpline;
-	UE_LOG(LogTemp, Warning, TEXT("InitialDistance: %f"), InitialDistance);
 	CurrentDistanceOnSpline = InitialDistance;
 	bMovingOnSpline = (SplineToFollow != nullptr);
 
@@ -103,6 +103,7 @@ void AElectricCharacter::SetSpline(USplineComponent* InSpline, float InitialDist
 
 void AElectricCharacter::OnInputGoUp()
 {
+	UE_LOG(LogTemp, Warning, TEXT("2222"));
     MoveDirection = 1.f; // Mover hacia adelante
 }
 
