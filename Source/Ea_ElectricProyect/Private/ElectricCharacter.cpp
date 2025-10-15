@@ -126,4 +126,7 @@ void AElectricCharacter::OnInputBackDown()
 		MoveDirection = 0;
 	}
 }
+void AElectricCharacter::UnPossessed()
+{
+}
 
