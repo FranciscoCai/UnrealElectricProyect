@@ -26,8 +26,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Called when this pawn becomes possessed by a controller (override to apply mapping context each possession)
+	virtual void PossessedBy(AController* NewController) override;
+
 	// Quitar el mapping context al dejar de ser pose¨ªdo
-	void UnPossessed();
+	virtual void UnPossessed() override;
 
 public:	
 	// Called every frame

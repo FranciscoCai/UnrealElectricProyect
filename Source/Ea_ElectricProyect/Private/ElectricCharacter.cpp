@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "InputMappingContext.h"
 #include "InputAction.h"
+#include "ElectricSpline.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 
@@ -59,11 +60,13 @@ void AElectricCharacter::Tick(float DeltaTime)
 		{
 			CurrentDistanceOnSpline = SplineLength;
 			MoveDirection = 0.f;
+			GetTargetpanel(1);
 		}
 		else if (CurrentDistanceOnSpline < 0.f)
 		{
 			CurrentDistanceOnSpline = 0.f;
 			MoveDirection = 0.f;
+			GetTargetpanel(0);
 		}
 
 		FVector NewLocation = SplineToFollow->GetLocationAtDistanceAlongSpline(CurrentDistanceOnSpline, ESplineCoordinateSpace::World);
@@ -101,9 +104,14 @@ void AElectricCharacter::SetSpline(USplineComponent* InSpline, float InitialDist
 	}
 }
 
+
+
+//UE_LOG(LogTemp, Warning, TEXT("2222"));
+
+
+
 void AElectricCharacter::OnInputGoUp()
 {
-	UE_LOG(LogTemp, Warning, TEXT("2222"));
     MoveDirection = 1.f; // Mover hacia adelante
 }
 
@@ -128,5 +136,67 @@ void AElectricCharacter::OnInputBackDown()
 }
 void AElectricCharacter::UnPossessed()
 {
+}
+
+void AElectricCharacter::GetTargetpanel(int endStart)
+{
+
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (SplineToFollow)
+	{
+		if (AActor* SplineOwner = SplineToFollow->GetOwner())
+		{
+			if (AElectricSpline* ElectricSplineOwner = Cast<AElectricSpline>(SplineOwner))
+			{
+				if (endStart == 1)
+				{
+					AElectricPanelStation* EndStation = ElectricSplineOwner->PanelStationEnd;
+					if (EndStation)
+					{
+						AElectricPanel* TargetPanel = EndStation->ElectricPanelClass;
+						if (TargetPanel)
+						{
+							if (PC && PC->GetPawn() != TargetPanel)
+							{
+								PC->Possess(TargetPanel);
+								Destroy();
+							}
+						}
+						else
+						{
+						}
+					}
+					else
+					{
+					}
+				}
+				else if (endStart == 0)
+				{
+					AElectricPanelStation* StartStation = ElectricSplineOwner->PanelStationStart;
+					if (StartStation)
+					{
+						AElectricPanel* TargetPanel = StartStation->ElectricPanelClass;
+						if (TargetPanel)
+						{
+							if (PC && PC->GetPawn() != TargetPanel)
+							{
+								PC->Possess(TargetPanel);
+								Destroy();
+							}
+						}
+						else
+						{
+						}
+					}
+					else
+					{
+					}
+				}
+			}
+			else
+			{
+			}
+		}
+	}
 }
 

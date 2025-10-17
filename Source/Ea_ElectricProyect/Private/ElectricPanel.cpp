@@ -29,21 +29,42 @@ void AElectricPanel::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Poseer el panel como antes
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (PC && PC->GetPawn() != this)
 	{
 		PC->Possess(this);
 	}
-	// Asignar el Mapping Context
-	if (PC)
+	if (PC && PC->GetPawn() == this)
+	{
+		PC->Possess(this);
+		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
+		{
+			if (UEnhancedInputLocalPlayerSubsystem* LocalSubsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+			{
+				if (PanelMappingContext)
+				{
+					LocalSubsystem->AddMappingContext(PanelMappingContext, 0);
+				}
+			}
+		}
+	}
+}
+
+void AElectricPanel::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// Apply the panel's mapping context every time this pawn is possessed by a local player controller.
+	if (APlayerController* PC = Cast<APlayerController>(NewController))
 	{
 		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
 		{
 			if (UEnhancedInputLocalPlayerSubsystem* LocalSubsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 			{
-				// Asegúrate de tener una variable UPROPERTY para tu MappingContext
-				LocalSubsystem->AddMappingContext(PanelMappingContext, 0);
+				if (PanelMappingContext)
+				{
+					LocalSubsystem->AddMappingContext(PanelMappingContext, 0);
+				}
 			}
 		}
 	}
@@ -110,14 +131,25 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtSt
 		if (PC)
 		{
 			PC->Possess(NewCharacter);
-			UnPossessed();
 		}
 	}
 }
 
 void AElectricPanel::UnPossessed()
 {
+	// Remove the panel mapping context when no longer possessed
 	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (!PC)
+	{
+		// If GetController() is null (APawn::UnPossessed clears it), attempt to find local player controller owning this user.
+		// This keeps behavior flexible for manual calls to UnPossessed() (like after SpawnAndPossessCharacter).
+		PC = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		if (!PC || PC->GetPawn() == this)
+		{
+			// If still the same pawn, don't remove (safety).
+		}
+	}
+
 	if (!PC) return;
 
 	ULocalPlayer* LocalPlayer = PC->GetLocalPlayer();

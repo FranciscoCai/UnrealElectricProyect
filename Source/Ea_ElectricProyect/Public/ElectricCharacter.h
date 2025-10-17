@@ -69,4 +69,6 @@ private:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputBackDown();
 
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void GetTargetpanel(int endStart);
 };
