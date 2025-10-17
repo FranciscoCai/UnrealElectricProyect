@@ -146,7 +146,7 @@ void AElectricPanel::UnPossessed()
 		PC = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 		if (!PC || PC->GetPawn() == this)
 		{
-			// If still the same pawn, don't remove (safety).
+			
 		}
 	}
 

@@ -47,6 +47,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
 	TSubclassOf<AElectricCharacter> ElectricCharacterClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pose")
+	bool poseOnStart = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
 	bool bSpawnUp = true;
