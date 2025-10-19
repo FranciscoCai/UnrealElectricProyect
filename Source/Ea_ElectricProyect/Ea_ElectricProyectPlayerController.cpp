@@ -65,10 +65,16 @@ void AEa_ElectricProyectPlayerController::SetupInputComponent()
 void AEa_ElectricProyectPlayerController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
-	for (TActorIterator<AMainCamera> It(GetWorld()); It; ++It)
+	if (CameraActor == nullptr)
 	{
-		CameraActor = *It; // Asigna la primera c¨¢mara AMainCamera encontrada
-		break;
+	   for (TActorIterator<AMainCamera> It(GetWorld()); It; ++It)
+	   {
+	     	if (It->activeCamera) // Solo si activeCamera es true
+		    {
+			CameraActor = *It;
+			break;
+	      	}
+	   }
 	}
 	if (CameraActor)
 	{

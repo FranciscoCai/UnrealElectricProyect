@@ -37,9 +37,6 @@ protected:
 	/** Pointer to the mobile controls widget */
 	TObjectPtr<UUserWidget> MobileControlsWidget;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
-	AMainCamera* CameraActor;
-
 	/** Gameplay initialization */
 	virtual void BeginPlay() override;
 
@@ -50,4 +47,6 @@ public:
 	// Añade esta línea en la sección pública de tu clase
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	AMainCamera* CameraActor;
 };

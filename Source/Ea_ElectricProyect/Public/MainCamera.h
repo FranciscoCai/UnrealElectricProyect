@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/SplineComponent.h"
+#include "GameFramework/PlayerController.h" 
 #include "MainCamera.generated.h"
 
 class UCameraComponent;
@@ -16,13 +18,29 @@ public:
 	// Sets default values for this actor's properties
 	AMainCamera();
 
+	UPROPERTY()
+	APlayerController* CachedPlayerController;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	UCameraComponent* FollowCamera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	bool defaultCamera = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	bool focusedCamera = false;
+	bool focusedCamera = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	bool activeCamera = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	bool moveCamera = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	AMainCamera* cameraToChange;
+	UFUNCTION(BlueprintCallable, Category = "Camera")
+	void OnActivatedCamera();
+
+	UFUNCTION(BlueprintCallable, Category = "Camera")
+	void OnUnActivatedCamera();
+
 
 	//UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Camera")
 	//APawn* PawnToFollow = nullptr;
