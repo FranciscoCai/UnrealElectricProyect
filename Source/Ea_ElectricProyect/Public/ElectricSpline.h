@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ElectricPanelStation.h"
 #include "ElectricSpline.generated.h"
 
 class USplineComponent;
+class AElectricPanelStation;
 
 UCLASS()
 class EA_ELECTRICPROYECT_API AElectricSpline : public AActor

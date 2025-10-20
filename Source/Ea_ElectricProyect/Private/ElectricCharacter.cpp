@@ -8,6 +8,8 @@
 #include "InputMappingContext.h"
 #include "InputAction.h"
 #include "ElectricSpline.h"
+#include "ElectricPanel.h" 
+#include "ElectricPanelStation.h" 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 

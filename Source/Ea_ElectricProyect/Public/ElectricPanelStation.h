@@ -1,15 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ElectricPanel.h"
-#include "ElectricSpline.h"
 #include "ElectricPanelStation.generated.h"
 
-class AElectricPanel;
+
 class AElectricSpline;
+class AElectricPanel;
 UCLASS()
 class EA_ELECTRICPROYECT_API AElectricPanelStation : public AActor
 {
@@ -18,8 +16,10 @@ class EA_ELECTRICPROYECT_API AElectricPanelStation : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AElectricPanelStation();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
 	AElectricPanel* ElectricPanelClass;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,7 +36,6 @@ public:
 	bool bSpawnRight = true;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
 	bool bSpawnLeft = false;
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Electric")
 	TArray<AElectricSpline*> Splines;

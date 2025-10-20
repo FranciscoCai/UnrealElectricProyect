@@ -1,15 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "ElectricPanelStation.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "ElectricSpline.h"
 #include "ElectricPanel.generated.h"
 
+class AElectricPanelStation;
 class AElectricSpline;
 class AElectricCharacter;
-class AElectricPanelStation;
 class UInputAction;
 class UInputMappingContext;
 class UEnhancedInputLocalPlayerSubsystem;
@@ -21,33 +19,23 @@ class EA_ELECTRICPROYECT_API AElectricPanel : public APawn
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
 	AElectricPanel();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	// Called when this pawn becomes possessed by a controller (override to apply mapping context each possession)
 	virtual void PossessedBy(AController* NewController) override;
-
-	// Quitar el mapping context al dejar de ser poseído
 	virtual void UnPossessed() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
-	AElectricPanelStation* ElectricPanelStationOn;
 
-	// Referencias a los 4 splines, editables en Blueprint
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
+	AElectricPanelStation* ElectricPanelStationOn; // 使用前向声明指针
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
 	TArray<AElectricSpline*> Splines;
 
-	// Clase del personaje a spawnear, editable en Blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
 	TSubclassOf<AElectricCharacter> ElectricCharacterClass;
 
@@ -63,7 +51,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
 	bool bSpawnLeft = false;
 
-	// Input mappings, editables en Blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* PanelMappingContext;
 
@@ -75,7 +62,6 @@ public:
 	UInputAction* MoveLeftAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* MoveRightAction;
-
 
 private:
 	void SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart);
@@ -91,5 +77,3 @@ private:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputRight();
 };
-
-
