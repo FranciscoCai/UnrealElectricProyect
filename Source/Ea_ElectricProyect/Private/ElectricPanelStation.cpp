@@ -25,3 +25,11 @@ void AElectricPanelStation::Tick(float DeltaTime)
 
 }
 
+void AElectricPanelStation::SetlectricPanelInformation()
+{
+	if (ElectricPanelClass)
+	{
+		ElectricPanelClass->ElectricPanelStationOn = this;
+	}
+}
+

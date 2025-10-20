@@ -1,13 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
+#include "ElectricPanelStation.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "ElectricSpline.h"
 #include "ElectricPanel.generated.h"
 
 class AElectricSpline;
 class AElectricCharacter;
+class AElectricPanelStation;
 class UInputAction;
 class UInputMappingContext;
 class UEnhancedInputLocalPlayerSubsystem;
@@ -38,6 +40,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
+	AElectricPanelStation* ElectricPanelStationOn;
 
 	// Referencias a los 4 splines, editables en Blueprint
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
@@ -48,7 +52,7 @@ public:
 	TSubclassOf<AElectricCharacter> ElectricCharacterClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pose")
-	bool poseOnStart = true;
+	bool poseOnStart = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
 	bool bSpawnUp = true;

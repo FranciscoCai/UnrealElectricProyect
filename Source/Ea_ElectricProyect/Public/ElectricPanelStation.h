@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ElectricPanel.h"
+#include "ElectricSpline.h"
 #include "ElectricPanelStation.generated.h"
 
+class AElectricPanel;
+class AElectricSpline;
 UCLASS()
 class EA_ELECTRICPROYECT_API AElectricPanelStation : public AActor
 {
@@ -25,4 +28,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
+	bool bSpawnUp = true;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
+	bool bSpawnDown = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
+	bool bSpawnRight = true;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
+	bool bSpawnLeft = false;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Electric")
+	TArray<AElectricSpline*> Splines;
+
+	UFUNCTION(BlueprintCallable)
+	void SetlectricPanelInformation();
 };
