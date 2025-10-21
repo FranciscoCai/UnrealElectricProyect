@@ -13,8 +13,6 @@
 #include "InputAction.h"
 #include "Logging/LogMacros.h"
 #include "Engine/Engine.h"
-#include "EngineUtils.h"
-#include "Camera/CameraActor.h"
 
 // Sets default values
 AElectricPanel::AElectricPanel()
@@ -91,10 +89,10 @@ void AElectricPanel::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 }
 
 
-void AElectricPanel::OnInputUp()    { SpawnAndPossessCharacter(0, bSpawnUp); }
-void AElectricPanel::OnInputDown()  { SpawnAndPossessCharacter(1, bSpawnDown); }
-void AElectricPanel::OnInputRight() { SpawnAndPossessCharacter(2, bSpawnRight); }
-void AElectricPanel::OnInputLeft()  { SpawnAndPossessCharacter(3, bSpawnLeft); }
+void AElectricPanel::OnInputUp()    { SpawnAndPossessCharacter(0, ElectricPanelStationOn->bSpawnUp); }
+void AElectricPanel::OnInputDown()  { SpawnAndPossessCharacter(1, ElectricPanelStationOn->bSpawnDown); }
+void AElectricPanel::OnInputRight() { SpawnAndPossessCharacter(2, ElectricPanelStationOn->bSpawnRight); }
+void AElectricPanel::OnInputLeft()  { SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnLeft); }
 
 void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart)
 {
@@ -107,9 +105,9 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtSt
 			TEXT("¡PRUEBA DE LOG EN PANTALLA!")
 		);
 	}
-	if (!ElectricCharacterClass || !Splines.IsValidIndex(SplineIndex) || !Splines[SplineIndex])
+	if (!ElectricCharacterClass || !ElectricPanelStationOn->Splines.IsValidIndex(SplineIndex) || !ElectricPanelStationOn->Splines[SplineIndex])
 		return;
-	AElectricSpline* SplineActor = Splines[SplineIndex];
+	AElectricSpline* SplineActor = ElectricPanelStationOn->Splines[SplineIndex];
 	USplineComponent* SplineComp = SplineActor->FindComponentByClass<USplineComponent>();
 	if (!SplineComp) return;
 
@@ -138,16 +136,6 @@ void AElectricPanel::UnPossessed()
 {
 	// Remove the panel mapping context when no longer possessed
 	APlayerController* PC = Cast<APlayerController>(GetController());
-	if (!PC)
-	{
-		// If GetController() is null (APawn::UnPossessed clears it), attempt to find local player controller owning this user.
-		// This keeps behavior flexible for manual calls to UnPossessed() (like after SpawnAndPossessCharacter).
-		PC = Cast<APlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		if (!PC || PC->GetPawn() == this)
-		{
-			
-		}
-	}
 
 	if (!PC) return;
 

@@ -160,6 +160,7 @@ void AElectricCharacter::GetTargetpanel(int endStart)
 						{
 							if (PC && PC->GetPawn() != TargetPanel)
 							{
+								UE_LOG(LogTemp, Warning, TEXT("2222"));
 								PC->Possess(TargetPanel);
 								Destroy();
 							}

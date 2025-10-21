@@ -17,9 +17,6 @@ public:
 	// Sets default values for this actor's properties
 	AElectricPanelStation();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
-	AElectricPanel* ElectricPanelClass;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -27,6 +24,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
+	AElectricPanel* ElectricPanelClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
 	bool bSpawnUp = true;
@@ -41,5 +41,8 @@ public:
 	TArray<AElectricSpline*> Splines;
 
 	UFUNCTION(BlueprintCallable)
-	void SetlectricPanelInformation();
+	void SetelectricPanelInformation();
+
+	UFUNCTION(BlueprintCallable, Category = "Electric")
+	void UpdateSplinesPanelStation();
 };

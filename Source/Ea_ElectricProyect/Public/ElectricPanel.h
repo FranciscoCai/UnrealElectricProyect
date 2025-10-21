@@ -33,8 +33,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
 	AElectricPanelStation* ElectricPanelStationOn; // 使用前向声明指针
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
-	TArray<AElectricSpline*> Splines;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
 	TSubclassOf<AElectricCharacter> ElectricCharacterClass;
@@ -42,14 +40,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pose")
 	bool poseOnStart = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
-	bool bSpawnUp = true;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
-	bool bSpawnDown = false;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
-	bool bSpawnRight = true;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
-	bool bSpawnLeft = false;
+
+
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* PanelMappingContext;
@@ -58,10 +51,10 @@ public:
 	UInputAction* MoveUpAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* MoveDownAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveRightAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* MoveLeftAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
-	UInputAction* MoveRightAction;
 
 private:
 	void SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart);
@@ -73,7 +66,7 @@ private:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputDown();
 	UFUNCTION(BlueprintCallable, Category = "Input")
-	void OnInputLeft();
-	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputRight();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInputLeft();
 };
