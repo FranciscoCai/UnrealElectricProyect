@@ -117,13 +117,16 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtSt
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	AElectricCharacter* NewCharacter = GetWorld()->SpawnActor<AElectricCharacter>(ElectricCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
 
-	NewCharacter->SetSpline(SplineComp, InitialDistance);
-	NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
+
 
 	if (NewCharacter)
 	{
+			UE_LOG(LogTemp, Warning, TEXT("Spawned ElectricCharacter at location: %s"), *SpawnLocation.ToString());
+	NewCharacter->SetSpline(SplineComp, InitialDistance);
+	NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
 		APlayerController* PC = Cast<APlayerController>(GetController());
 		if (PC)
 		{
