@@ -119,11 +119,11 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtSt
 	SpawnParams.Owner = this;
 	AElectricCharacter* NewCharacter = GetWorld()->SpawnActor<AElectricCharacter>(ElectricCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
 
-	NewCharacter->SetSpline(SplineComp, InitialDistance);
-	NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
-
 	if (NewCharacter)
 	{
+		NewCharacter->SetSpline(SplineComp, InitialDistance);
+		NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
+
 		APlayerController* PC = Cast<APlayerController>(GetController());
 		if (PC)
 		{
