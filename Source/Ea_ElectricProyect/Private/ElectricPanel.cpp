@@ -118,7 +118,7 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtSt
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 	AElectricCharacter* NewCharacter = GetWorld()->SpawnActor<AElectricCharacter>(ElectricCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
-
+	
 	if (NewCharacter)
 	{
 		NewCharacter->SetSpline(SplineComp, InitialDistance);
