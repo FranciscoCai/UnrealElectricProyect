@@ -2,6 +2,7 @@
 
 
 #include "ElectricPanel.h"
+#include "ElectricPanelStation.h"
 #include "ElectricCharacter.h"
 #include "ElectricSpline.h"
 #include "Kismet/GameplayStatics.h"

@@ -2,6 +2,8 @@
 
 
 #include "ElectricLookAtCamera.h"
+#include "Components/SplineComponent.h"
+
 
 // Sets default values
 AElectricLookAtCamera::AElectricLookAtCamera()

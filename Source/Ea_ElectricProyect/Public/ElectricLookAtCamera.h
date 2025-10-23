@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "ElectricLookAtCamera.generated.h"
 
+class USplineComponent;
+
 UCLASS()
 class EA_ELECTRICPROYECT_API AElectricLookAtCamera : public AActor
 {
@@ -23,4 +25,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Spline component that can be edited in the editor and modified from Blueprints
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spline")
+	USplineComponent* splinecomponent;
 };
