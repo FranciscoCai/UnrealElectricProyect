@@ -116,21 +116,22 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtSt
 	FVector SpawnLocation = SplineComp->GetLocationAtDistanceAlongSpline(InitialDistance, ESplineCoordinateSpace::World);
 	FRotator SpawnRotation = SplineComp->GetRotationAtDistanceAlongSpline(InitialDistance, ESplineCoordinateSpace::World);
 
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = this;
-	AElectricCharacter* NewCharacter = GetWorld()->SpawnActor<AElectricCharacter>(ElectricCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
-	
-	if (NewCharacter)
-	{
-		NewCharacter->SetSpline(SplineComp, InitialDistance);
-		NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
-
-		APlayerController* PC = Cast<APlayerController>(GetController());
-		if (PC)
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AElectricCharacter* NewCharacter = GetWorld()->SpawnActor<AElectricCharacter>(ElectricCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
+				
+		if (NewCharacter)
 		{
-			PC->Possess(NewCharacter);
+			NewCharacter->SetSpline(SplineComp, InitialDistance);
+			NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
+
+			APlayerController* PC = Cast<APlayerController>(GetController());
+			if (PC)
+			{
+				PC->Possess(NewCharacter);
+			}
 		}
-	}
 }
 
 void AElectricPanel::UnPossessed()
