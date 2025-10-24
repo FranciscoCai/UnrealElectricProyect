@@ -25,8 +25,6 @@ public:
 	UCameraComponent* FollowCamera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	bool defaultCamera = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	bool focusedCamera = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	bool activeCamera = false;
