@@ -4,19 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ElectricLookAtCamera.generated.h"
+#include "CameraLookAtSpline.generated.h"
 
 class USplineComponent;
-	class ACameraLookAtSpline;
 
 UCLASS()
-class EA_ELECTRICPROYECT_API AElectricLookAtCamera : public AActor
+class EA_ELECTRICPROYECT_API ACameraLookAtSpline : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AElectricLookAtCamera();
+	ACameraLookAtSpline();
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,7 +25,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Electric Camera")
-	ACameraLookAtSpline* CameraLookAtSpline;
-
+	// Spline visible y editable en la escena
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Spline")
+	USplineComponent* SplineComponent;
 };
