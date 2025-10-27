@@ -40,10 +40,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pose")
 	bool poseOnStart = false;
 
-
-
-
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* PanelMappingContext;
 
@@ -58,9 +54,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* Interact;
 
-private:
 	void SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart);
-	
+
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
@@ -71,6 +66,10 @@ private:
 	void OnInputRight();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputLeft();
+private:
+
+protected:
+	// Make overridable by C++ subclasses
 	UFUNCTION(BlueprintCallable, Category = "Input")
-	void OnInteract();
+	virtual void OnInteract();
 };
