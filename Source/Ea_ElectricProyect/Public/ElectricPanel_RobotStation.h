@@ -15,10 +15,6 @@ class EA_ELECTRICPROYECT_API AElectricPanel_RobotStation : public AElectricPanel
 	GENERATED_BODY()
 
 protected:
-	// Ensure base class behavior is executed
-	virtual void BeginPlay() override;
-	virtual void PossessedBy(AController* NewController) override;
-	virtual void UnPossessed() override;
 
 	// Override the base class interaction handler
 	virtual void OnInteract() override;
@@ -26,5 +22,6 @@ protected:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
 	AWallEParent* WallEParentRef;
+
 	
 };

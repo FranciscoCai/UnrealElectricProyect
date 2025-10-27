@@ -4,23 +4,6 @@
 #include "Engine/Engine.h"
 #include "GameFramework/PlayerController.h"
 
-void AElectricPanel_RobotStation::BeginPlay()
-{
-	Super::BeginPlay();
-	// Additional initialization for RobotStation (if needed)
-}
-
-void AElectricPanel_RobotStation::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-	// Additional logic when this pawn is possessed (if needed)
-}
-
-void AElectricPanel_RobotStation::UnPossessed()
-{
-	Super::UnPossessed();
-	// Additional cleanup when this pawn is unpossessed (if needed)
-}
 
 void AElectricPanel_RobotStation::OnInteract()
 {

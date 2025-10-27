@@ -1,0 +1,17 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "WallEParent.h"
+#include "WallELevel1.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class EA_ELECTRICPROYECT_API AWallELevel1 : public AWallEParent
+{
+	GENERATED_BODY()
+	
+};
