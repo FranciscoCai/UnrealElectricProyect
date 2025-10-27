@@ -136,8 +136,12 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtSt
 
 void AElectricPanel::UnPossessed()
 {
-	// Remove the panel mapping context when no longer possessed
+	// Guardar el Controller antes de llamar a Super, ya que Super::UnPossessed()
+	// puede limpiar el Controller o ejecutar el evento Blueprint en los hijos.
 	APlayerController* PC = Cast<APlayerController>(GetController());
+
+	// Llamar a la implementación base para permitir que los BPs hijos reciban el Event UnPossessed.
+	Super::UnPossessed();
 
 	if (!PC) return;
 
