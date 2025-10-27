@@ -55,6 +55,8 @@ public:
 	UInputAction* MoveRightAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* MoveLeftAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* Interact;
 
 private:
 	void SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart);
@@ -69,4 +71,6 @@ private:
 	void OnInputRight();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputLeft();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInteract();
 };

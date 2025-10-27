@@ -86,6 +86,7 @@ void AElectricPanel::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInput->BindAction(MoveDownAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputDown);
 		EnhancedInput->BindAction(MoveRightAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputRight);
 		EnhancedInput->BindAction(MoveLeftAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputLeft);
+		EnhancedInput->BindAction(Interact, ETriggerEvent::Started, this, &AElectricPanel::OnInteract);
 	}
 }
 
@@ -94,6 +95,7 @@ void AElectricPanel::OnInputUp()    { SpawnAndPossessCharacter(0, ElectricPanelS
 void AElectricPanel::OnInputDown()  { SpawnAndPossessCharacter(1, ElectricPanelStationOn->bSpawnDown); }
 void AElectricPanel::OnInputRight() { SpawnAndPossessCharacter(2, ElectricPanelStationOn->bSpawnRight); }
 void AElectricPanel::OnInputLeft()  { SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnLeft); }
+void AElectricPanel::OnInteract()  { ; }
 
 void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart)
 {
