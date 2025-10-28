@@ -8,6 +8,7 @@
 
 class UInputMappingContext;
 class UInputAction;
+class AElectricPanel_RobotStation;
 struct FInputActionValue;
 
 UCLASS()
@@ -18,6 +19,10 @@ class EA_ELECTRICPROYECT_API AWallEParent : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AWallEParent();
+
+	// Variable p¨²blica de tipo AElectricPanel_RobotStation
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
+	AElectricPanel_RobotStation* RobotStationRef;
 
 protected:
 	// Called when the game starts or when spawned
@@ -51,4 +56,7 @@ protected:
 	/** Ejecuta el movimiento en el Character (Right, Forward) */
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void DoMove(float Right, float Forward);
+
+	// Nueva funci¨®n para manejar el inicio de la acci¨®n InteractStation
+	void OnInteractStationStarted(const FInputActionValue& Value);
 };

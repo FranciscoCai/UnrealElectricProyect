@@ -8,6 +8,7 @@
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
 #include "MainCamera.h"
+#include "ElectricPanel_RobotStation.h" // Aseg¨²rate de incluir la cabecera
 
 // Sets default values
 AWallEParent::AWallEParent()
@@ -37,6 +38,10 @@ void AWallEParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		if (MoveAction)
 		{
 			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AWallEParent::Move);
+		}
+		if (InteractStation)
+		{
+			EnhancedInput->BindAction(InteractStation, ETriggerEvent::Started, this, &AWallEParent::OnInteractStationStarted);
 		}
 	}
 }
@@ -109,13 +114,11 @@ void AWallEParent::DoMove(float Right, float Forward)
 					}
 					else
 					{
-						// fallback to the controller rotation if camera component missing
 						Rotation = PC->GetControlRotation();
 					}
 				}
 				else
 				{
-					// view target is not our camera actor -> fallback
 					Rotation = PC->GetControlRotation();
 				}
 			}
@@ -129,16 +132,34 @@ void AWallEParent::DoMove(float Right, float Forward)
 			Rotation = GetController()->GetControlRotation();
 		}
 
-		// Use yaw only to compute movement directions
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get forward and right vectors
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		// add movement
 		AddMovementInput(ForwardDirection, Forward);
 		AddMovementInput(RightDirection, Right);
+
+		// --- Solo el mesh visual apunta hacia la direcci¨®n de movimiento ---
+		FVector MoveDir = (ForwardDirection * Forward) + (RightDirection * Right);
+		if (!MoveDir.IsNearlyZero())
+		{
+			FRotator MeshTargetRotation = MoveDir.Rotation();
+			MeshTargetRotation.Pitch = 0.f;
+			MeshTargetRotation.Roll = 0.f;
+			GetMesh()->SetWorldRotation(MeshTargetRotation);
+		}
+	}
+}
+
+void AWallEParent::OnInteractStationStarted(const FInputActionValue& Value)
+{
+	if (RobotStationRef)
+	{
+		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		{
+			PC->Possess(RobotStationRef);
+
+		}
 	}
 }
 
