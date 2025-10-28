@@ -7,6 +7,7 @@
 #include "InputActionValue.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
+#include "MainCamera.h"
 
 // Sets default values
 AWallEParent::AWallEParent()
@@ -31,7 +32,6 @@ void AWallEParent::Tick(float DeltaTime)
 void AWallEParent::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	UE_LOG(LogTemp, Warning, TEXT("AWallEParent::SetupPlayerInputComponent"));
 	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		if (MoveAction)
