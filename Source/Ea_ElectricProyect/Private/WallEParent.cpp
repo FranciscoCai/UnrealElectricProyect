@@ -94,8 +94,42 @@ void AWallEParent::DoMove(float Right, float Forward)
 {
 	if (GetController() != nullptr)
 	{
-		// find out which way is forward from controller rotation
-		const FRotator Rotation = GetController()->GetControlRotation();
+		FRotator Rotation;
+
+		// Prefer camera rotation from the current view target if possible
+		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		{
+			if (AActor* ViewTarget = PC->GetViewTarget())
+			{
+				if (AMainCamera* CamActor = Cast<AMainCamera>(ViewTarget))
+				{
+					if (CamActor->FollowCamera)
+					{
+						Rotation = CamActor->FollowCamera->GetComponentRotation();
+					}
+					else
+					{
+						// fallback to the controller rotation if camera component missing
+						Rotation = PC->GetControlRotation();
+					}
+				}
+				else
+				{
+					// view target is not our camera actor -> fallback
+					Rotation = PC->GetControlRotation();
+				}
+			}
+			else
+			{
+				Rotation = PC->GetControlRotation();
+			}
+		}
+		else
+		{
+			Rotation = GetController()->GetControlRotation();
+		}
+
+		// Use yaw only to compute movement directions
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
 		// get forward and right vectors
