@@ -42,6 +42,8 @@ protected:
 	/** Acción de movimiento (Vector2D) */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MoveAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* InteractStation;
 
 	/** Called por Enhanced Input cuando se recibe Move (Vector2D) */
 	void Move(const FInputActionValue& Value);
