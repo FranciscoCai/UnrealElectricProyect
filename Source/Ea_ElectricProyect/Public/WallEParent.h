@@ -9,6 +9,8 @@
 class UInputMappingContext;
 class UInputAction;
 class AElectricPanel_RobotStation;
+class AElectricPanel;
+class UPrimitiveComponent;
 struct FInputActionValue;
 
 UCLASS()
@@ -20,7 +22,7 @@ public:
 	// Sets default values for this character's properties
 	AWallEParent();
 
-	// Variable p¨²blica de tipo AElectricPanel_RobotStation
+	// Variable pública de tipo AElectricPanel_RobotStation
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
 	AElectricPanel_RobotStation* RobotStationRef;
 
@@ -49,6 +51,10 @@ protected:
 	UInputAction* MoveAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* InteractStation;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* PickUp;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* PickDown;
 
 	/** Called por Enhanced Input cuando se recibe Move (Vector2D) */
 	void Move(const FInputActionValue& Value);
@@ -57,6 +63,18 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void DoMove(float Right, float Forward);
 
-	// Nueva funci¨®n para manejar el inicio de la acci¨®n InteractStation
+	// Nueva función para manejar el inicio de la acción InteractStation
 	void OnInteractStationStarted(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnPickUpStarted();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnPickDownStarted();
+
+private:
+	// Reference to the currently held electric panel (if any)
+	AElectricPanel* HeldPanel = nullptr;
+
+	// Cached pointer to the PickBox component (found by name or tag at BeginPlay)
+	UPrimitiveComponent* PickBoxComp = nullptr;
 };

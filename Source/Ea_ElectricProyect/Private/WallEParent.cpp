@@ -8,19 +8,50 @@
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
 #include "MainCamera.h"
-#include "ElectricPanel_RobotStation.h" // Aseg¨²rate de incluir la cabecera
+#include "ElectricPanel_RobotStation.h" // Asegúrate de incluir la cabecera
+#include "ElectricPanel.h"
+#include "Components/PrimitiveComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AWallEParent::AWallEParent()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	HeldPanel = nullptr;
+	PickBoxComp = nullptr;
 }
 
 // Called when the game starts or when spawned
 void AWallEParent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Try to find a component named or tagged "PickBox" on this actor (Blueprint BoxCollision)
+	TArray<UActorComponent*> Comps;
+	GetComponents(Comps);
+	for (UActorComponent* Comp : Comps)
+	{
+		if (!Comp) continue;
+
+		// Look for a component whose name contains "PickBox" or has component tag "PickBox"
+		if (Comp->GetName().Contains(TEXT("PickBox")) || Comp->ComponentHasTag(TEXT("PickBox")))
+		{
+			PickBoxComp = Cast<UPrimitiveComponent>(Comp);
+			break;
+		}
+	}
+
+	// UE_LOG to confirm presence/absence of PickBox
+	if (PickBoxComp)
+	{
+		UE_LOG(LogTemp, Log, TEXT("AWallEParent: PickBox found -> Name: %s, Class: %s"), *PickBoxComp->GetName(), *PickBoxComp->GetClass()->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("daaadaa"), *GetName());
+	}
 }
 
 // Called every frame
@@ -42,6 +73,14 @@ void AWallEParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		if (InteractStation)
 		{
 			EnhancedInput->BindAction(InteractStation, ETriggerEvent::Started, this, &AWallEParent::OnInteractStationStarted);
+		}
+		if (PickUp)
+		{
+			EnhancedInput->BindAction(PickUp, ETriggerEvent::Started, this, &AWallEParent::OnPickUpStarted);
+		}
+		if (PickDown)
+		{
+			EnhancedInput->BindAction(PickDown, ETriggerEvent::Started, this, &AWallEParent::OnPickDownStarted);
 		}
 	}
 }
@@ -139,7 +178,7 @@ void AWallEParent::DoMove(float Right, float Forward)
 		AddMovementInput(ForwardDirection, Forward);
 		AddMovementInput(RightDirection, Right);
 
-		// --- Solo el mesh visual apunta hacia la direcci¨®n de movimiento ---
+		// --- Solo el mesh visual apunta hacia la dirección de movimiento ---
 		FVector MoveDir = (ForwardDirection * Forward) + (RightDirection * Right);
 		if (!MoveDir.IsNearlyZero())
 		{
@@ -161,5 +200,52 @@ void AWallEParent::OnInteractStationStarted(const FInputActionValue& Value)
 
 		}
 	}
+}
+
+void AWallEParent::OnPickUpStarted()
+{
+	UE_LOG(LogTemp, Warning, TEXT("112312311"), *GetName());
+	// If already holding something, ignore
+	if (HeldPanel) return;
+	// Ensure we have PickBox component cached, if not attempt to find it now
+	if (!PickBoxComp)
+	{
+		TArray<UActorComponent*> Comps;
+		GetComponents(Comps);
+		for (UActorComponent* Comp : Comps)
+		{
+			if (!Comp) continue;
+			if (Comp->GetName().Contains(TEXT("PickBox")) || Comp->ComponentHasTag(TEXT("PickBox")))
+			{
+				PickBoxComp = Cast<UPrimitiveComponent>(Comp);
+				break;
+			}
+		}
+	}
+	if (!PickBoxComp) return;
+	// Get overlapping actors of the pickbox and find an ElectricPanel
+	TArray<AActor*> OverlapActors;
+	PickBoxComp->GetOverlappingActors(OverlapActors, AElectricPanel::StaticClass());
+	if (OverlapActors.Num() == 0) return;
+
+	AElectricPanel* Panel = Cast<AElectricPanel>(OverlapActors[0]);
+	if (!Panel) return;
+
+	// Attach the panel to the PickBox component so it follows its position continually
+	FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, true);
+	Panel->AttachToComponent(PickBoxComp, AttachRules);
+
+	// Optionally, disable physics or movement on the panel here if needed (not done by default)
+
+	HeldPanel = Panel;
+}
+
+void AWallEParent::OnPickDownStarted()
+{
+	if (!HeldPanel) return;
+
+	// Detach and keep world transform where it is, then clear reference
+	HeldPanel->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	HeldPanel = nullptr;
 }
 
