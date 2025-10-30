@@ -9,7 +9,7 @@
 #include "GameFramework/PlayerController.h"
 #include "MainCamera.h"
 #include "ElectricPanel_RobotStation.h" // Asegúrate de incluir la cabecera
-#include "ElectricPanel.h"
+#include "ElectricPanelPickable.h"
 #include "Components/PrimitiveComponent.h"
 #include "Components/BoxComponent.h"
 
@@ -204,7 +204,6 @@ void AWallEParent::OnInteractStationStarted(const FInputActionValue& Value)
 
 void AWallEParent::OnPickUpStarted()
 {
-	UE_LOG(LogTemp, Warning, TEXT("112312311"), *GetName());
 	// If already holding something, ignore
 	if (HeldPanel) return;
 	// Ensure we have PickBox component cached, if not attempt to find it now
@@ -225,10 +224,10 @@ void AWallEParent::OnPickUpStarted()
 	if (!PickBoxComp) return;
 	// Get overlapping actors of the pickbox and find an ElectricPanel
 	TArray<AActor*> OverlapActors;
-	PickBoxComp->GetOverlappingActors(OverlapActors, AElectricPanel::StaticClass());
+	PickBoxComp->GetOverlappingActors(OverlapActors, AElectricPanelPickable::StaticClass());
 	if (OverlapActors.Num() == 0) return;
 
-	AElectricPanel* Panel = Cast<AElectricPanel>(OverlapActors[0]);
+	AElectricPanelPickable* Panel = Cast<AElectricPanelPickable>(OverlapActors[0]);
 	if (!Panel) return;
 
 	// Attach the panel to the PickBox component so it follows its position continually
