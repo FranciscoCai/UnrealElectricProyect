@@ -92,9 +92,9 @@ void AElectricPanel::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 
 void AElectricPanel::OnInputUp()    { SpawnAndPossessCharacter(0, ElectricPanelStationOn->bSpawnUp); }
-void AElectricPanel::OnInputDown()  { SpawnAndPossessCharacter(1, ElectricPanelStationOn->bSpawnDown); }
-void AElectricPanel::OnInputRight() { SpawnAndPossessCharacter(2, ElectricPanelStationOn->bSpawnRight); }
-void AElectricPanel::OnInputLeft()  { SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnLeft); }
+void AElectricPanel::OnInputLeft()  { SpawnAndPossessCharacter(1, ElectricPanelStationOn->bSpawnLeft); }
+void AElectricPanel::OnInputDown() { SpawnAndPossessCharacter(2, ElectricPanelStationOn->bSpawnDown); }
+void AElectricPanel::OnInputRight()  { SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnRight); }
 void AElectricPanel::OnInteract()  { ; }
 
 void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart)

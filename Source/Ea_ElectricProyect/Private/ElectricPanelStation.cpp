@@ -45,9 +45,9 @@ void AElectricPanelStation::UpdateSplinesPanelStation()
         switch (i)
         {
         case 0: bSpawn = bSpawnUp;    break;
-        case 1: bSpawn = bSpawnDown;  break;
-        case 2: bSpawn = bSpawnRight; break;
-        case 3: bSpawn = bSpawnLeft;  break;
+        case 1: bSpawn = bSpawnLeft;  break;
+        case 2: bSpawn = bSpawnDown; break;
+        case 3: bSpawn = bSpawnRight;  break;
         default: break;
         }
 

@@ -31,11 +31,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
 	bool bSpawnUp = true;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
+	bool bSpawnLeft = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
 	bool bSpawnDown = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
 	bool bSpawnRight = true;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
-	bool bSpawnLeft = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Electric")
 	TArray<AElectricSpline*> Splines;
