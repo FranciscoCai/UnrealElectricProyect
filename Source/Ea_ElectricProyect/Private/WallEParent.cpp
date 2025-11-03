@@ -11,7 +11,9 @@
 #include "ElectricPanel_RobotStation.h" // Asegúrate de incluir la cabecera
 #include "ElectricPanelPickable.h"
 #include "Components/PrimitiveComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Components/BoxComponent.h"
+#include "TimerManager.h"
 
 // Sets default values
 AWallEParent::AWallEParent()
@@ -72,7 +74,9 @@ void AWallEParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		}
 		if (InteractStation)
 		{
-			EnhancedInput->BindAction(InteractStation, ETriggerEvent::Started, this, &AWallEParent::OnInteractStationStarted);
+			// Bind hold behavior: Started -> BeginInteractStation, Canceled -> CancelInteractStation
+			EnhancedInput->BindAction(InteractStation, ETriggerEvent::Started, this, &AWallEParent::BeginInteractStation);
+			EnhancedInput->BindAction(InteractStation, ETriggerEvent::Canceled, this, &AWallEParent::CancelInteractStation);
 		}
 		if (PickUp)
 		{
@@ -88,7 +92,9 @@ void AWallEParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void AWallEParent::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-
+	bIsHoldingInteractStation = false;
+	CurrentInteractStationHoldTime = 0.0f;
+	bHasTriggeredInteractStation = false;
 	// Apply mapping context when possessed by a local player controller
 	if (APlayerController* PC = Cast<APlayerController>(NewController))
 	{
@@ -123,6 +129,15 @@ void AWallEParent::UnPossessed()
 			}
 		}
 	}
+
+	// Ensure any pending interact hold is cancelled on unpossess
+	if (GetWorld())
+	{
+		GetWorldTimerManager().ClearTimer(InteractStationTimerHandle);
+	}
+	bIsHoldingInteractStation = false;
+	CurrentInteractStationHoldTime = 0.0f;
+	bHasTriggeredInteractStation = false;
 }
 
 void AWallEParent::Move(const FInputActionValue& Value)
@@ -190,14 +205,58 @@ void AWallEParent::DoMove(float Right, float Forward)
 	}
 }
 
-void AWallEParent::OnInteractStationStarted(const FInputActionValue& Value)
+void AWallEParent::BeginInteractStation()
 {
+	// If duration is zero or we're already holding and triggered, call immediately
+	if (InteractStationHoldDuration <= 0.0f)
+	{
+		OnInteractStation();
+		return;
+	}
+
+	if (GetWorld())
+	{
+		// Setup hold state and timer
+		bIsHoldingInteractStation = true;
+		bHasTriggeredInteractStation = false;
+		CurrentInteractStationHoldTime = 0.0f;
+
+		GetWorldTimerManager().ClearTimer(InteractStationTimerHandle);
+		GetWorldTimerManager().SetTimer(InteractStationTimerHandle, [this]()
+		{
+			// Timer lambda runs on timer thread but in UE it's safe to call onto UObject as long as world exists.
+			// We route to member function to keep logic consistent.
+			if (!bHasTriggeredInteractStation)
+			{
+				bHasTriggeredInteractStation = true;
+				bIsHoldingInteractStation = false;
+				CurrentInteractStationHoldTime = InteractStationHoldDuration;
+				OnInteractStation();
+			}
+		}, InteractStationHoldDuration, false);
+	}
+}
+
+void AWallEParent::CancelInteractStation()
+{
+	// Clear timer and reset state
+	if (GetWorld())
+	{
+		GetWorldTimerManager().ClearTimer(InteractStationTimerHandle);
+	}
+	bIsHoldingInteractStation = false;
+	CurrentInteractStationHoldTime = 0.0f;
+	bHasTriggeredInteractStation = false;
+}
+
+void AWallEParent::OnInteractStation()
+{
+	// Default behavior when hold completes: possess the RobotStationRef (same logic as previous instant version)
 	if (RobotStationRef)
 	{
 		if (APlayerController* PC = Cast<APlayerController>(GetController()))
 		{
 			PC->Possess(RobotStationRef);
-
 		}
 	}
 }

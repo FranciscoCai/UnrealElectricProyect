@@ -3,6 +3,8 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "TimerManager.h"
+#include "GameFramework/PlayerController.h"
 #include "ElectricPanel.generated.h"
 
 class AElectricPanelStation;
@@ -69,7 +71,40 @@ public:
 private:
 
 protected:
-	// Make overridable by C++ subclasses
+	// Make overridable by C++ subclasses: this is called WHEN se completa el hold.
+	// Los hijos deben sobreescribir esta función para ejecutar su comportamiento.
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void OnInteract();
+
+	// --- Hold-to-interact implementation (base class) ---
+public:
+	// Tiempo requerido (segundos) para mantener Interact antes de ejecutar OnInteract.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta=(ClampMin="0.0"))
+	float InteractHoldDuration = 1.5f;
+
+	// Inicia la acción de mantener pulsado (llamado por el binding de input)
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void BeginInteract();
+
+	// Cancela la acción de mantener pulsado (release / cancel)
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void CancelInteract();
+
+protected:
+	// Estado de hold (no editable por diseñador en runtime salvo Visualización)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Input")
+	bool bIsHoldingInteract = false;
+
+	// Tiempo acumulado desde que se empezó a mantener (si quieres mostrar progreso desde Blueprint/Widget debes actualizar esto desde un timer/Widget tick)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Input")
+	float CurrentInteractHoldTime = 0.0f;
+
+	// Evita ejecutar OnInteract varias veces por un mismo hold
+	bool bHasTriggeredInteract = false;
+
+	// Timer handle para no depender de Tick
+	FTimerHandle InteractTimerHandle;
+
+	// Callback cuando termina el timer
+	void OnInteractTimerFinished();
 };

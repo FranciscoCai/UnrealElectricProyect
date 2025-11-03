@@ -12,6 +12,7 @@ class AElectricPanel_RobotStation;
 class AElectricPanel;
 class UPrimitiveComponent;
 struct FInputActionValue;
+struct FTimerHandle;
 
 UCLASS()
 class EA_ELECTRICPROYECT_API AWallEParent : public ACharacter
@@ -63,9 +64,36 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void DoMove(float Right, float Forward);
 
-	// Nueva función para manejar el inicio de la acción InteractStation
-	void OnInteractStationStarted(const FInputActionValue& Value);
+	// --- Hold-to-interact para la estación (equivalente a ElectricPanel) ---
+	// Called when the hold completes (children/blueprints can call/override if needed)
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	virtual void OnInteractStation();
 
+	// Input callbacks: start / cancel interact-hold
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void BeginInteractStation();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void CancelInteractStation();
+
+	// Duration required to hold to trigger OnInteractStation (seconds)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta=(ClampMin="0.0"))
+	float InteractStationHoldDuration = 1.5f;
+
+	// Visible runtime state (for widgets/debug)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Input")
+	bool bIsHoldingInteractStation = false;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Input")
+	float CurrentInteractStationHoldTime = 0.0f;
+
+private:
+	// Prevent multiple triggers per hold
+	bool bHasTriggeredInteractStation = false;
+
+	// Timer handle for the hold timer
+	FTimerHandle InteractStationTimerHandle;
+
+public:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnPickUpStarted();
 	UFUNCTION(BlueprintCallable, Category = "Input")

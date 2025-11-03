@@ -2,6 +2,7 @@
 
 #include "ElectricPanel_RobotStation.h"
 #include "Engine/Engine.h"
+#include "WallEParent.h"
 #include "GameFramework/PlayerController.h"
 
 
