@@ -2,7 +2,10 @@
 
 
 #include "ElectricLookAtCamera.h"
+#include "Ea_ElectricProyectPlayerController.h"
 #include "Components/SplineComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerController.h"
 
 
 // Sets default values
@@ -17,7 +20,16 @@ AElectricLookAtCamera::AElectricLookAtCamera()
 void AElectricLookAtCamera::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!PC)
+	{
+		return;
+	}
+	AEa_ElectricProyectPlayerController* MyPC = Cast<AEa_ElectricProyectPlayerController>(PC);
+	if (MyPC)
+	{
+		MyPC->LookAtOn = this;
+	}
 }
 
 // Called every frame

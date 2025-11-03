@@ -10,6 +10,7 @@
 
 class UInputMappingContext;
 class UUserWidget;
+class AElectricLookAtCamera; // Forward declaration for the electric look-at camera
 
 /**
  *  Basic PlayerController class for a third person game
@@ -47,6 +48,11 @@ public:
 	// Añade esta línea en la sección pública de tu clase
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float DeltaTime) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	AMainCamera* CameraActor;
+
+	// Electric look-at camera instance
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	AElectricLookAtCamera* LookAtOn;
 };
