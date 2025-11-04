@@ -8,6 +8,8 @@
 
 class AElectricSpline;
 class AElectricPanel;
+class ACameraLookAtSpline;
+
 UCLASS()
 class EA_ELECTRICPROYECT_API AElectricPanelStation : public AActor
 {
@@ -39,6 +41,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Electric")
 	TArray<AElectricSpline*> Splines;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Electric")
+	TArray<ACameraLookAtSpline*> LookAtSplineChange;
 
 	UFUNCTION(BlueprintCallable)
 	void SetelectricPanelInformation();

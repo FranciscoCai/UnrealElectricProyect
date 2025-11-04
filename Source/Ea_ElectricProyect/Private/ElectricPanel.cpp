@@ -5,6 +5,9 @@
 #include "ElectricPanelStation.h"
 #include "ElectricCharacter.h"
 #include "ElectricSpline.h"
+#include "CameraLookAtSpline.h"
+#include "Ea_ElectricProyectPlayerController.h"
+#include "ElectricLookAtCamera.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/SplineComponent.h"
@@ -187,26 +190,32 @@ void AElectricPanel::OnInteractTimerFinished()
 	OnInteract();
 }
 
-void AElectricPanel::SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart)
+void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtStart)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(
-			-1, // Key (-1 para que cada mensaje sea único)
-			5.0f, // Duración en segundos
-			FColor::Yellow, // Color del texto
-			TEXT("¡PRUEBA DE LOG EN PANTALLA!")
-		);
-	}
-	if (!ElectricCharacterClass || !ElectricPanelStationOn->Splines.IsValidIndex(SplineIndex) || !ElectricPanelStationOn->Splines[SplineIndex])
+	if (!ElectricCharacterClass || !ElectricPanelStationOn->Splines.IsValidIndex(ControlIndex) || !ElectricPanelStationOn->Splines[ControlIndex])
 		return;
-	AElectricSpline* SplineActor = ElectricPanelStationOn->Splines[SplineIndex];
+	AElectricSpline* SplineActor = ElectricPanelStationOn->Splines[ControlIndex];
 	USplineComponent* SplineComp = SplineActor->FindComponentByClass<USplineComponent>();
 	if (!SplineComp) return;
 
 	float InitialDistance = bSpawnAtStart ? 0.0f : SplineComp->GetSplineLength();
 	FVector SpawnLocation = SplineComp->GetLocationAtDistanceAlongSpline(InitialDistance, ESplineCoordinateSpace::World);
 	FRotator SpawnRotation = SplineComp->GetRotationAtDistanceAlongSpline(InitialDistance, ESplineCoordinateSpace::World);
+
+	if (ElectricPanelStationOn->LookAtSplineChange.IsValidIndex(ControlIndex))
+	{
+		ACameraLookAtSpline* LookAtSplineActor = ElectricPanelStationOn->LookAtSplineChange[ControlIndex];
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		if (PC)
+		{
+			AEa_ElectricProyectPlayerController *EaPC = Cast<AEa_ElectricProyectPlayerController>(PC);
+			if (EaPC && EaPC->LookAtOn)
+			{
+				// Assign the actor (ACameraLookAtSpline*), not the USplineComponent*
+				EaPC->LookAtOn->CameraLookAtSpline = LookAtSplineActor;
+			}
+		}
+	}
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;

@@ -2,6 +2,9 @@
 
 
 #include "ElectricPanelStation.h"
+#include "ElectricPanel.h"
+#include "ElectricSpline.h"
+
 
 // Sets default values
 AElectricPanelStation::AElectricPanelStation()

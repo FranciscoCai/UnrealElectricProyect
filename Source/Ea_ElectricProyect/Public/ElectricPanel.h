@@ -56,7 +56,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* Interact;
 
-	void SpawnAndPossessCharacter(int32 SplineIndex, bool bSpawnAtStart);
+	void SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtStart);
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;
 
@@ -68,7 +68,6 @@ public:
 	void OnInputRight();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputLeft();
-private:
 
 protected:
 	// Make overridable by C++ subclasses: this is called WHEN se completa el hold.
