@@ -13,6 +13,7 @@
 #include "Components/PrimitiveComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/BoxComponent.h"
+#include "ElectricPanelStation.h"
 #include "TimerManager.h"
 
 // Sets default values
@@ -302,8 +303,52 @@ void AWallEParent::OnPickDownStarted()
 {
 	if (!HeldPanel) return;
 
-	// Detach and keep world transform where it is, then clear reference
 	HeldPanel->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+	// Ensure PickBoxComp exists (try to find again if needed)
+	if (!PickBoxComp)
+	{
+		TArray<UActorComponent*> Comps;
+		GetComponents(Comps);
+		for (UActorComponent* Comp : Comps)
+		{
+			if (!Comp) continue;
+			if (Comp->GetName().Contains(TEXT("PickBox")) || Comp->ComponentHasTag(TEXT("PickBox")))
+			{
+				PickBoxComp = Cast<UPrimitiveComponent>(Comp);
+				break;
+			}
+		}
+	}
+
+	// If there's no PickBox component, just drop the panel and exit safely
+	if (!PickBoxComp)
+	{
+		HeldPanel = nullptr;
+		return;
+	}
+
+	// Get overlapping station actors safely and check array size before access
+	TArray<AActor*> OverlapActors;
+	PickBoxComp->GetOverlappingActors(OverlapActors, AElectricPanelStation::StaticClass());
+
+	if (OverlapActors.Num() == 0)
+	{
+		// No station overlapped: leave the panel where it was detached
+		HeldPanel = nullptr;
+		return;
+	}
+
+	AElectricPanelStation* Station = Cast<AElectricPanelStation>(OverlapActors[0]);
+
+	if (Station && HeldPanel)
+	{
+		// Snap the held panel to the station's world transform (position + rotation)
+		HeldPanel->SetActorLocationAndRotation(Station->GetActorLocation(), Station->GetActorRotation());
+		Station -> SetelectricPanelInformation(HeldPanel);
+		Station->UpdateSplinesPanelStation();
+	}
+
 	HeldPanel = nullptr;
 }
 

@@ -45,7 +45,7 @@ public:
 	TArray<ACameraLookAtSpline*> LookAtSplineChange;
 
 	UFUNCTION(BlueprintCallable)
-	void SetelectricPanelInformation();
+	void SetelectricPanelInformation(AElectricPanel* PanelAttach);
 
 	UFUNCTION(BlueprintCallable, Category = "Electric")
 	void UpdateSplinesPanelStation();

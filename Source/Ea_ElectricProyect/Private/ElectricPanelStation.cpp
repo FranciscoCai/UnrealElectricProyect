@@ -18,7 +18,10 @@ AElectricPanelStation::AElectricPanelStation()
 void AElectricPanelStation::BeginPlay()
 {
 	Super::BeginPlay();
-    SetelectricPanelInformation();
+    if (ElectricPanelClass)
+    {
+        SetelectricPanelInformation(ElectricPanelClass);
+    }
 	UpdateSplinesPanelStation();    
 }
 
@@ -29,11 +32,11 @@ void AElectricPanelStation::Tick(float DeltaTime)
 
 }
 
-void AElectricPanelStation::SetelectricPanelInformation()
+void AElectricPanelStation::SetelectricPanelInformation(AElectricPanel* PanelAttach)
 {
-	if (ElectricPanelClass)
+	if (PanelAttach)
 	{
-		ElectricPanelClass->ElectricPanelStationOn = this;
+		PanelAttach->ElectricPanelStationOn = this;
 	}
 }
 
