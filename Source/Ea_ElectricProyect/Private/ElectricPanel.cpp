@@ -192,7 +192,10 @@ void AElectricPanel::OnInteractTimerFinished()
 
 void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtStart)
 {
-	if (!ElectricCharacterClass || !ElectricPanelStationOn->Splines.IsValidIndex(ControlIndex) || !ElectricPanelStationOn->Splines[ControlIndex])
+	// Validate pointers/indices in a safe order to avoid dereferencing null.
+	if (!ElectricCharacterClass || !ElectricPanelStationOn)
+		return;
+	if (!ElectricPanelStationOn->Splines.IsValidIndex(ControlIndex) || !ElectricPanelStationOn->Splines[ControlIndex])
 		return;
 	AElectricSpline* SplineActor = ElectricPanelStationOn->Splines[ControlIndex];
 	USplineComponent* SplineComp = SplineActor->FindComponentByClass<USplineComponent>();
@@ -205,34 +208,38 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtS
 	if (ElectricPanelStationOn->LookAtSplineChange.IsValidIndex(ControlIndex))
 	{
 		ACameraLookAtSpline* LookAtSplineActor = ElectricPanelStationOn->LookAtSplineChange[ControlIndex];
-		APlayerController* PC = Cast<APlayerController>(GetController());
-		if (PC)
+		if (LookAtSplineActor)
 		{
-			AEa_ElectricProyectPlayerController *EaPC = Cast<AEa_ElectricProyectPlayerController>(PC);
-			if (EaPC && EaPC->LookAtOn)
+			APlayerController* PC = Cast<APlayerController>(GetController());
+			if (PC)
 			{
-				// Assign the actor (ACameraLookAtSpline*), not the USplineComponent*
-				EaPC->LookAtOn->CameraLookAtSpline = LookAtSplineActor;
+				AEa_ElectricProyectPlayerController *EaPC = Cast<AEa_ElectricProyectPlayerController>(PC);
+				if (EaPC && EaPC->LookAtOn)
+				{
+					// Assign the actor (ACameraLookAtSpline*), not the USplineComponent*
+					EaPC->LookAtOn->CameraLookAtSpline = LookAtSplineActor;
+				}
 			}
 		}
 	}
 
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		AElectricCharacter* NewCharacter = GetWorld()->SpawnActor<AElectricCharacter>(ElectricCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
-				
-		if (NewCharacter)
-		{
-			NewCharacter->SetSpline(SplineComp, InitialDistance);
-			NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
+	if (!GetWorld()) return;
 
-			APlayerController* PC = Cast<APlayerController>(GetController());
-			if (PC)
-			{
-				PC->Possess(NewCharacter);
-			}
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	AElectricCharacter* NewCharacter = GetWorld()->SpawnActor<AElectricCharacter>(ElectricCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
+			
+	if (NewCharacter)
+	{
+		NewCharacter->SetSpline(SplineComp, InitialDistance);
+		NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
+
+		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		{
+			PC->Possess(NewCharacter);
 		}
+	}
 }
 
 void AElectricPanel::UnPossessed()
