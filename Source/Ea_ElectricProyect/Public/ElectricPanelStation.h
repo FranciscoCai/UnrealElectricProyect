@@ -44,8 +44,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Electric")
 	TArray<ACameraLookAtSpline*> LookAtSplineChange;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Electric")
 	void SetelectricPanelInformation(AElectricPanel* PanelAttach);
+	UFUNCTION(BlueprintCallable, Category = "Electric")
+	void SetelectricStationPanelInformation(AElectricPanel* PanelAttach);
 
 	UFUNCTION(BlueprintCallable, Category = "Electric")
 	void UpdateSplinesPanelStation();

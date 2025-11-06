@@ -39,6 +39,13 @@ void AElectricPanelStation::SetelectricPanelInformation(AElectricPanel* PanelAtt
 		PanelAttach->ElectricPanelStationOn = this;
 	}
 }
+void AElectricPanelStation::SetelectricStationPanelInformation(AElectricPanel* PanelAttach)
+{
+    if (PanelAttach)
+    {
+        ElectricPanelClass = PanelAttach;
+    }
+}
 
 void AElectricPanelStation::UpdateSplinesPanelStation()
 {

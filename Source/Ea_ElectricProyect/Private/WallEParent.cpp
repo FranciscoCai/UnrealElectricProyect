@@ -290,6 +290,18 @@ void AWallEParent::OnPickUpStarted()
 	AElectricPanelPickable* Panel = Cast<AElectricPanelPickable>(OverlapActors[0]);
 	if (!Panel) return;
 
+	// If the panel was placed on a station, clear the station's reference to it
+	if (Panel->ElectricPanelStationOn)
+	{
+		AElectricPanelStation* PanelStationOn = Panel->ElectricPanelStationOn;
+		// Clear station's stored panel pointer so station no longer references this panel
+		PanelStationOn->ElectricPanelClass = nullptr;
+		// Update splines so station state is consistent
+		PanelStationOn->UpdateSplinesPanelStation();
+		// Clear panel's back-reference
+		Panel->ElectricPanelStationOn = nullptr;
+	}
+
 	// Attach the panel to the PickBox component so it follows its position continually
 	FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, true);
 	Panel->AttachToComponent(PickBoxComp, AttachRules);
@@ -346,6 +358,7 @@ void AWallEParent::OnPickDownStarted()
 		// Snap the held panel to the station's world transform (position + rotation)
 		HeldPanel->SetActorLocationAndRotation(Station->GetActorLocation(), Station->GetActorRotation());
 		Station -> SetelectricPanelInformation(HeldPanel);
+		Station->SetelectricStationPanelInformation(HeldPanel);
 		Station->UpdateSplinesPanelStation();
 	}
 
