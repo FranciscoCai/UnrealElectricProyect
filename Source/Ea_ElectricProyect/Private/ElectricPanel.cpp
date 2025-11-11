@@ -116,11 +116,9 @@ void AElectricPanel::OnInputLeft()  { SpawnAndPossessCharacter(1, ElectricPanelS
 void AElectricPanel::OnInputDown() { SpawnAndPossessCharacter(2, ElectricPanelStationOn->bSpawnDown); }
 void AElectricPanel::OnInputRight()  { SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnRight); }
 
-void AElectricPanel::OnInteract()
+void AElectricPanel::OnInteract_Implementation()
 {
-	// Implementación por defecto vacía.
-	// Los hijos deben sobreescribir esta función para ejecutar la acción real
-	// cuando el hold se completa.
+	UE_LOG(LogTemp, Log, TEXT("AElectricPanel::OnInteract() - Interact completado"));
 }
 
 void AElectricPanel::BeginInteract()

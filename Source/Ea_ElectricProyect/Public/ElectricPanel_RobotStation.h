@@ -15,13 +15,10 @@ class EA_ELECTRICPROYECT_API AElectricPanel_RobotStation : public AElectricPanel
 	GENERATED_BODY()
 
 protected:
-
-	// Override the base class interaction handler
-	virtual void OnInteract() override;
+	// Override the base class interaction handler (C++ override)
+	virtual void OnInteract_Implementation() override;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
 	AWallEParent* WallEParentRef;
-
-	
 };

@@ -6,7 +6,7 @@
 #include "GameFramework/PlayerController.h"
 
 
-void AElectricPanel_RobotStation::OnInteract()
+void AElectricPanel_RobotStation::OnInteract_Implementation()
 {
 	// If a WallEParent reference is assigned, transfer local player possession to it.
 	if (WallEParentRef)

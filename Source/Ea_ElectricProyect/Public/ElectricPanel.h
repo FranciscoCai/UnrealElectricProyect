@@ -72,8 +72,9 @@ public:
 protected:
 	// Make overridable by C++ subclasses: this is called WHEN se completa el hold.
 	// Los hijos deben sobreescribir esta función para ejecutar su comportamiento.
-	UFUNCTION(BlueprintCallable, Category = "Input")
-	virtual void OnInteract();
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Input")
+	void OnInteract();
+	virtual void OnInteract_Implementation();
 
 	// --- Hold-to-interact implementation (base class) ---
 public:
