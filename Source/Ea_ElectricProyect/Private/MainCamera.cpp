@@ -33,6 +33,31 @@ void AMainCamera::BeginPlay()
 void AMainCamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+    if (bIsTransitioning && cameraToChange && cameraToChange->FollowCamera)
+    {
+        ElapsedTransitionTime += DeltaTime;
+        float Alpha = FMath::Clamp(ElapsedTransitionTime / TransitionDuration, 0.0f, 1.0f);
+        float SmoothAlpha = FMath::SmoothStep(0.0f, 1.0f, Alpha);
+
+        FVector TargetLocation = cameraToChange->FollowCamera->GetComponentLocation();
+        FRotator TargetRotation = cameraToChange->FollowCamera->GetComponentRotation();
+
+        FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, SmoothAlpha);
+        FRotator NewRotation = FMath::Lerp(StartRotation, TargetRotation, SmoothAlpha);
+
+        FollowCamera->SetWorldLocation(NewLocation);
+        FollowCamera->SetWorldRotation(NewRotation);
+
+        if (Alpha >= 1.0f)
+        {
+            bIsTransitioning = false;
+            FollowCamera->SetWorldLocation(TargetLocation);
+            FollowCamera->SetWorldRotation(TargetRotation);
+            cameraToChange->OnActivatedCamera();
+			cameraToChange = nullptr;
+        }
+    }
 }
 
 void AMainCamera::OnActivatedCamera()
@@ -53,5 +78,16 @@ void AMainCamera::OnActivatedCamera()
 void AMainCamera::OnUnActivatedCamera()
 {
     activeCamera = false; // Modifica la variable miembro correctamente
+}
+
+void AMainCamera::StartCameraTransition()
+{
+    if (cameraToChange)
+    {
+        bIsTransitioning = true;
+        StartLocation = FollowCamera->GetComponentLocation();
+        StartRotation = FollowCamera->GetComponentRotation();
+        ElapsedTransitionTime = 0.0f;
+    }
 }
 

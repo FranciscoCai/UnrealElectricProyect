@@ -5,12 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Camera/CameraComponent.h" 
-#include "MainCamera.h"
 #include "Ea_ElectricProyectPlayerController.generated.h"
 
 class UInputMappingContext;
 class UUserWidget;
 class AElectricLookAtCamera; // Forward declaration for the electric look-at camera
+class AMainCamera;
 
 /**
  *  Basic PlayerController class for a third person game

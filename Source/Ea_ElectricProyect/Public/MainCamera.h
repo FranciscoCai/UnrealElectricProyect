@@ -51,4 +51,27 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera|Transition")
+    bool bIsTransitioning = false;
+
+	// Velocidad de movimiento (unidades por segundo)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera|Transition")
+    float MoveSpeed = 300.0f;
+
+    // Velocidad de rotaci車n (grados por segundo)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera|Transition")
+    float RotSpeed = 90.0f;
+
+    FVector StartLocation;
+    FRotator StartRotation;
+	UFUNCTION(BlueprintCallable, Category = "Camera|Transition")
+    void StartCameraTransition();
+
+public:
+    // Duraci車n de la transici車n en segundos
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera|Transition")
+    float TransitionDuration = 5.0f;
+
+    // Tiempo acumulado de la transici車n
+    float ElapsedTransitionTime = 0.0f;
 };

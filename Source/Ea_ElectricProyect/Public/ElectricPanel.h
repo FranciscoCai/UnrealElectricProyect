@@ -94,7 +94,7 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Input")
 	bool bIsHoldingInteract = false;
 
-	// Tiempo acumulado desde que se empezó a mantener (si quieres mostrar progreso desde Blueprint/Widget debes actualizar esto desde un timer/Widget tick)
+	// Tiempo acumulado desde que se empez?a mantener (si quieres mostrar progreso desde Blueprint/Widget debes actualizar esto desde un timer/Widget tick)
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Input")
 	float CurrentInteractHoldTime = 0.0f;
 
