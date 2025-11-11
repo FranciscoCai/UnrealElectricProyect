@@ -98,6 +98,10 @@ public:
 	void OnPickUpStarted();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnPickDownStarted();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
+	AMainCamera* CameraToChange;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
+	float TransitionDuration;
 
 private:
 	// Reference to the currently held electric panel (if any)

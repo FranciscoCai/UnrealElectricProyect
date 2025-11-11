@@ -12,9 +12,13 @@ void AElectricPanel_RobotStation::OnInteract_Implementation()
 	// Only pure C++ instances reach this point.
 	if (WallEParentRef)
 	{
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		if (CameraToBack->bIsTransitioning)
 		{
-			ChangeCameraStart();
+			return;
+		}
+		if (AEa_ElectricProyectPlayerController* PC = Cast<AEa_ElectricProyectPlayerController>(GetController()))
+		{
+			PC->ChangeCameraStart(CameraToGo, GoDuration);
 			PC->Possess(WallEParentRef);
 		}
 	}

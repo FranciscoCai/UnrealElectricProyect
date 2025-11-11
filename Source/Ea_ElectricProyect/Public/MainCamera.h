@@ -51,7 +51,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera|Transition")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera|Transition")
     bool bIsTransitioning = false;
 
 	// Velocidad de movimiento (unidades por segundo)

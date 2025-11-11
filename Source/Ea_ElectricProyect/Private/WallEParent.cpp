@@ -255,8 +255,13 @@ void AWallEParent::OnInteractStation()
 	// Default behavior when hold completes: possess the RobotStationRef (same logic as previous instant version)
 	if (RobotStationRef)
 	{
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		if (RobotStationRef && RobotStationRef->CameraToGo && RobotStationRef->CameraToGo->bIsTransitioning)
 		{
+			return; 
+		}
+		if (AEa_ElectricProyectPlayerController* PC = Cast<AEa_ElectricProyectPlayerController>(GetController()))
+		{
+			PC->ChangeCameraStart(RobotStationRef->CameraToBack, RobotStationRef->BackDuration);
 			PC->Possess(RobotStationRef);
 		}
 	}

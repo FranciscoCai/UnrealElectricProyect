@@ -55,4 +55,6 @@ public:
 	// Electric look-at camera instance
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	AElectricLookAtCamera* LookAtOn;
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "RobotStation")
+	void ChangeCameraStart(AMainCamera* CamaraToChange, float TransitionDuration);
 };

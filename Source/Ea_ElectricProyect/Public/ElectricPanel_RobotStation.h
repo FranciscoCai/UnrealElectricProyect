@@ -20,9 +20,14 @@ protected:
 	virtual void OnInteract_Implementation() override;
 
 public:
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "RobotStation")
-	void ChangeCameraStart();
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
 	AWallEParent* WallEParentRef;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
+	AMainCamera* CameraToGo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
+	float GoDuration;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
+	AMainCamera* CameraToBack;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
+	float BackDuration;
 };
