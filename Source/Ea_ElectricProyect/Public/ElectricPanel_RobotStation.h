@@ -6,6 +6,7 @@
 #include "ElectricPanel.h"
 #include "ElectricPanel_RobotStation.generated.h"
 class AWallEParent;
+
 /**
  * 
  */
@@ -19,6 +20,9 @@ protected:
 	virtual void OnInteract_Implementation() override;
 
 public:
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "RobotStation")
+	void ChangeCameraStart();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
 	AWallEParent* WallEParentRef;
 };

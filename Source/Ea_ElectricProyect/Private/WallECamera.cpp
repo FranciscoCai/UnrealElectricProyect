@@ -14,42 +14,22 @@ AWallECamera::AWallECamera()
 void AWallECamera::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// If TargetActor not set in editor, try to use the player's pawn
-	if (!TargetActor)
-	{
-		if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
-		{
-			if (APawn* Pawn = PC->GetPawn())
-			{
-				TargetActor = Pawn;
-			}
-		}
-	}
 }
 
 void AWallECamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Ensure TargetActor follows whatever pawn the player controller currently possesses.
-	// This covers runtime pawn switches.
+	// Keep cached player controller reference (used only if needed elsewhere)
 	if (CachedPlayerController == nullptr)
 	{
 		CachedPlayerController = GetWorld()->GetFirstPlayerController();
 	}
 
-	if (CachedPlayerController)
-	{
-		APawn* CurrentPawn = CachedPlayerController->GetPawn();
-		if (CurrentPawn && CurrentPawn != TargetActor)
-		{
-			TargetActor = CurrentPawn;
-		}
-	}
+	if (!IsValid(TargetActor)) return;
 
 	if (!bEnableFollowArea) return;
-	if (!TargetActor) return;
+	if (bIsTransitioning) return;
 
 	const FVector CamLocation = GetActorLocation();
 	const FVector TargetLocation = TargetActor->GetActorLocation();

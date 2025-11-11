@@ -164,7 +164,6 @@ void AElectricPanel::CancelInteract()
 	// Stop vibration if running
 	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{
-		UE_LOG(LogTemp, Log, TEXT("AElectricPanel::OnInteract() - Interact completado"));
 		PC->PlayDynamicForceFeedback(0.0f, 0.0f, true, true, true, true, EDynamicForceFeedbackAction::Stop);
 	}
 }

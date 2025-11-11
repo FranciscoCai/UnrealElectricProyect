@@ -8,13 +8,14 @@
 
 void AElectricPanel_RobotStation::OnInteract_Implementation()
 {
-	// If a WallEParent reference is assigned, transfer local player possession to it.
+
+	// Only pure C++ instances reach this point.
 	if (WallEParentRef)
 	{
 		if (APlayerController* PC = Cast<APlayerController>(GetController()))
 		{
+			ChangeCameraStart();
 			PC->Possess(WallEParentRef);
-
 		}
 	}
 }
