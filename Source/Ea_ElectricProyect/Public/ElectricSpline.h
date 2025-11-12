@@ -22,7 +22,10 @@ public:
 	AElectricPanelStation* PanelStationStart;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
 	AElectricPanelStation* PanelStationEnd;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
+	bool PanelStartBool = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
+	bool PanelEndBool = false;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

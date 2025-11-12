@@ -56,6 +56,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* Interact;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Direction")
+	bool LimitUp = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Direction")
+	bool LimitLeft = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Direction")
+	bool LimitDown = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Direction")
+	bool LimitRight = true;
+
 	void SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtStart);
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;

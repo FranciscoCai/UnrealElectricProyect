@@ -111,10 +111,33 @@ void AElectricPanel::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 }
 
 
-void AElectricPanel::OnInputUp()    { SpawnAndPossessCharacter(0, ElectricPanelStationOn->bSpawnUp); }
-void AElectricPanel::OnInputLeft()  { SpawnAndPossessCharacter(1, ElectricPanelStationOn->bSpawnLeft); }
-void AElectricPanel::OnInputDown() { SpawnAndPossessCharacter(2, ElectricPanelStationOn->bSpawnDown); }
-void AElectricPanel::OnInputRight()  { SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnRight); }
+void AElectricPanel::OnInputUp()
+{
+    if (!LimitUp) return;
+    if (!ElectricPanelStationOn) return;
+    SpawnAndPossessCharacter(0, ElectricPanelStationOn->bSpawnUp);
+}
+
+void AElectricPanel::OnInputLeft()
+{
+    if (!LimitLeft) return;
+    if (!ElectricPanelStationOn) return;
+    SpawnAndPossessCharacter(1, ElectricPanelStationOn->bSpawnLeft);
+}
+
+void AElectricPanel::OnInputDown()
+{
+    if (!LimitDown) return;
+    if (!ElectricPanelStationOn) return;
+    SpawnAndPossessCharacter(2, ElectricPanelStationOn->bSpawnDown);
+}
+
+void AElectricPanel::OnInputRight()
+{
+    if (!LimitRight) return;
+    if (!ElectricPanelStationOn) return;
+    SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnRight);
+}
 
 void AElectricPanel::OnInteract_Implementation()
 {
