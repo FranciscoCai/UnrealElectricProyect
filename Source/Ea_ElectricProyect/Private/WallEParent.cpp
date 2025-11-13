@@ -8,7 +8,7 @@
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
 #include "MainCamera.h"
-#include "ElectricPanel_RobotStation.h" // Asegúrate de incluir la cabecera
+#include "ElectricPanel_RobotStation.h" // Asegur¨¢te de incluir la cabecera
 #include "ElectricPanelPickable.h"
 #include "Components/PrimitiveComponent.h"
 #include "Camera/CameraComponent.h"
@@ -75,17 +75,12 @@ void AWallEParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		}
 		if (InteractStation)
 		{
-			// Bind hold behavior: Started -> BeginInteractStation, Canceled -> CancelInteractStation
 			EnhancedInput->BindAction(InteractStation, ETriggerEvent::Started, this, &AWallEParent::BeginInteractStation);
 			EnhancedInput->BindAction(InteractStation, ETriggerEvent::Canceled, this, &AWallEParent::CancelInteractStation);
 		}
 		if (PickUp)
 		{
-			EnhancedInput->BindAction(PickUp, ETriggerEvent::Started, this, &AWallEParent::OnPickUpStarted);
-		}
-		if (PickDown)
-		{
-			EnhancedInput->BindAction(PickDown, ETriggerEvent::Started, this, &AWallEParent::OnPickDownStarted);
+			EnhancedInput->BindAction(PickUp, ETriggerEvent::Started, this, &AWallEParent::OnPickUpOrDownStarted);
 		}
 	}
 }
@@ -264,6 +259,20 @@ void AWallEParent::OnInteractStation()
 			PC->ChangeCameraStart(RobotStationRef->CameraToBack, RobotStationRef->BackDuration);
 			PC->Possess(RobotStationRef);
 		}
+	}
+}
+
+void AWallEParent::OnPickUpOrDownStarted()
+{
+	if (HeldPanel)
+	{
+		// Si ya est¨¢ sosteniendo un panel, suelta
+		OnPickDownStarted();
+	}
+	else
+	{
+		// Si no est¨¢ sosteniendo nada, recoge
+		OnPickUpStarted();
 	}
 }
 

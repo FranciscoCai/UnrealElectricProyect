@@ -54,8 +54,6 @@ protected:
 	UInputAction* InteractStation;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* PickUp;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* PickDown;
 
 	/** Called por Enhanced Input cuando se recibe Move (Vector2D) */
 	void Move(const FInputActionValue& Value);
@@ -98,6 +96,8 @@ public:
 	void OnPickUpStarted();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnPickDownStarted();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnPickUpOrDownStarted();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
 	AMainCamera* CameraToChange;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
