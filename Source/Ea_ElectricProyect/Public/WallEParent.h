@@ -121,4 +121,10 @@ private:
 	// Cached pointer to the PickBox component (found by name or tag at BeginPlay)
 	UPrimitiveComponent* PickBoxComp = nullptr;
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	float MovementSpeed = 0.0f;
+
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnMoveReleased(const FInputActionValue& Value);
 };

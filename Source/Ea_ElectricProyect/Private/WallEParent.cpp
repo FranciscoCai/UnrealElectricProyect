@@ -72,6 +72,8 @@ void AWallEParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		if (MoveAction)
 		{
 			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AWallEParent::Move);
+			// Nuevo binding para poner MovementSpeed a cero al soltar el bot¨®n
+			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Completed, this, &AWallEParent::OnMoveReleased);
 		}
 		if (InteractStation)
 		{
@@ -148,6 +150,9 @@ void AWallEParent::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	// Calcula la magnitud de la velocidad de movimiento
+	MovementSpeed = MovementVector.Size();
 
 	// route the input
 	DoMove(MovementVector.X, MovementVector.Y);
@@ -393,5 +398,10 @@ void AWallEParent::OnPressE()
 
 void AWallEParent::OnPressQ()
 {
+}
+
+void AWallEParent::OnMoveReleased(const FInputActionValue& Value)
+{
+	MovementSpeed = 0.0f;
 }
 
