@@ -14,4 +14,11 @@ class EA_ELECTRICPROYECT_API AWallELevel1 : public AWallEParent
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void OnPressE() override;
+	virtual void OnPressQ() override;
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "RobotStation")
+	void WallEUp();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "RobotStation")
+	void WallEDown();
 };

@@ -82,6 +82,14 @@ void AWallEParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		{
 			EnhancedInput->BindAction(PickUp, ETriggerEvent::Started, this, &AWallEParent::OnPickUpOrDownStarted);
 		}
+		if (PressE)
+		{
+			EnhancedInput->BindAction(PressE, ETriggerEvent::Started, this, &AWallEParent::OnPressE);
+		}
+		if (PressQ)
+		{
+			EnhancedInput->BindAction(PressQ, ETriggerEvent::Started, this, &AWallEParent::OnPressQ);
+		}
 	}
 }
 
@@ -377,5 +385,13 @@ void AWallEParent::OnPickDownStarted()
 	}
 
 	HeldPanel = nullptr;
+}
+
+void AWallEParent::OnPressE()
+{
+}
+
+void AWallEParent::OnPressQ()
+{
 }
 

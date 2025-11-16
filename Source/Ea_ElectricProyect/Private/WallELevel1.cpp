@@ -3,3 +3,13 @@
 
 #include "WallELevel1.h"
 
+void AWallELevel1::OnPressE()
+{
+	WallEUp();
+}
+
+void AWallELevel1::OnPressQ()
+{
+	WallEDown();
+}
+

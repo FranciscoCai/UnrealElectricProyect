@@ -54,6 +54,11 @@ protected:
 	UInputAction* InteractStation;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* PickUp;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+    UInputAction* PressE;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+    UInputAction* PressQ;
 
 	/** Called por Enhanced Input cuando se recibe Move (Vector2D) */
 	void Move(const FInputActionValue& Value);
@@ -72,7 +77,6 @@ protected:
 	void BeginInteractStation();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void CancelInteractStation();
-
 	// Duration required to hold to trigger OnInteractStation (seconds)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta=(ClampMin="0.0"))
 	float InteractStationHoldDuration = 1.5f;
@@ -83,6 +87,13 @@ protected:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Input")
 	float CurrentInteractStationHoldTime = 0.0f;
+
+    UFUNCTION(BlueprintCallable, Category = "Input")
+    virtual void OnPressE();
+
+    UFUNCTION(BlueprintCallable, Category = "Input")
+    virtual void OnPressQ();
+
 
 private:
 	// Prevent multiple triggers per hold
@@ -109,4 +120,5 @@ private:
 
 	// Cached pointer to the PickBox component (found by name or tag at BeginPlay)
 	UPrimitiveComponent* PickBoxComp = nullptr;
+
 };
