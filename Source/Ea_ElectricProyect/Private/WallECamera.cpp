@@ -4,6 +4,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Pawn.h"
+#include "Camera/CameraComponent.h"
 #include "Math/UnrealMathUtility.h"
 
 AWallECamera::AWallECamera()
@@ -47,7 +48,6 @@ void AWallECamera::Tick(float DeltaTime)
 			const FVector DesiredLocation(DesiredXY.X, DesiredXY.Y, CamLocation.Z);
 
 			const FVector NewLocation = FMath::VInterpTo(CamLocation, DesiredLocation, DeltaTime, MoveInterpSpeed);
-
 			FollowCamera->SetWorldLocation(NewLocation); // Solo mueve la c¨¢mara
 		}
 	}

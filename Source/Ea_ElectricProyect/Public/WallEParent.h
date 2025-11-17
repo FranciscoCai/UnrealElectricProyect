@@ -10,6 +10,7 @@ class UInputMappingContext;
 class UInputAction;
 class AElectricPanel_RobotStation;
 class AElectricPanel;
+class AMainCamera;
 class UPrimitiveComponent;
 struct FInputActionValue;
 struct FTimerHandle;
@@ -59,6 +60,8 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     UInputAction* PressQ;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* WallELook;
 
 	/** Called por Enhanced Input cuando se recibe Move (Vector2D) */
 	void Move(const FInputActionValue& Value);
