@@ -29,6 +29,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:	
 	// Called every frame
@@ -37,4 +38,12 @@ public:
 	// Componente spline visible y editable en el editor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
 	USplineComponent* SplineComponent;
+
+	// Handler que se une al evento (debe ser UFUNCTION para AddDynamic)
+	UFUNCTION()
+	void OpenClose(bool bIsOpen);
+
+private:
+	// Referencia cacheada al subsystem para desuscribir en EndPlay
+	class UElectricSplineOpneCloseSubsystem* CachedSubsystem = nullptr;
 };
