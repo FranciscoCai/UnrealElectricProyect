@@ -1,7 +1,7 @@
 	// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CameraLookAtSpline.h"
+#include "Cameras/CameraLookAtSpline.h"
 #include "Components/SplineComponent.h"
 
 // Sets default values

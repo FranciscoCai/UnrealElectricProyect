@@ -7,15 +7,15 @@
 #include "InputActionValue.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
-#include "MainCamera.h"
-#include "ElectricPanel_RobotStation.h" // Asegur¨¢te de incluir la cabecera
-#include "ElectricPanelPickable.h"
+#include "Cameras/MainCamera.h"
+#include "Panels/ElectricPanel_RobotStation.h" // Asegur¨¢te de incluir la cabecera
+#include "Panels/ElectricPanelPickable.h"
 #include "Components/PrimitiveComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/BoxComponent.h"
-#include "ElectricPanelStation.h"
+#include "Panels/ElectricPanelStation.h"
 #include "TimerManager.h"
-
+#include "Ea_ElectricProyectPlayerController.h"
 // Sets default values
 AWallEParent::AWallEParent()
 {
@@ -314,9 +314,21 @@ void AWallEParent::OnPickUpStarted()
 	PickBoxComp->GetOverlappingActors(OverlapActors, AElectricPanelPickable::StaticClass());
 	if (OverlapActors.Num() == 0) return;
 
-	AElectricPanelPickable* Panel = Cast<AElectricPanelPickable>(OverlapActors[0]);
-	if (!Panel) return;
+	AElectricPanelPickable* Panel = nullptr;
+	for (AActor* Actor : OverlapActors)
+	{
+		if (!Actor) continue;
+		if (AElectricPanelPickable* P = Cast<AElectricPanelPickable>(Actor))
+		{
+			if (P->CanPick)
+			{
+				Panel = P;
+				break;
+			}
+		}
+	}
 
+	if (!Panel) return;
 	// If the panel was placed on a station, clear the station's reference to it
 	if (Panel->ElectricPanelStationOn)
 	{

@@ -1,6 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "MainCamera.h"
+#include "Cameras/MainCamera.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SplineComponent.h"
 #include "Ea_ElectricProyectPlayerController.h"

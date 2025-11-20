@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ElectricLookAtCamera.h"
+#include "Cameras/ElectricLookAtCamera.h"
 #include "Ea_ElectricProyectPlayerController.h"
 #include "Components/SplineComponent.h"
 #include "Kismet/GameplayStatics.h"

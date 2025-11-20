@@ -8,6 +8,7 @@
 
 class USplineComponent;
 class AElectricPanelStation;
+class AElectricPanel;
 
 UCLASS()
 class EA_ELECTRICPROYECT_API AElectricSpline : public AActor
@@ -17,15 +18,6 @@ class EA_ELECTRICPROYECT_API AElectricSpline : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AElectricSpline();
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
-	AElectricPanelStation* PanelStationStart;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
-	AElectricPanelStation* PanelStationEnd;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
-	bool PanelStartBool = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
-	bool PanelEndBool = false;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,8 +34,21 @@ public:
 	// Handler que se une al evento (debe ser UFUNCTION para AddDynamic)
 	UFUNCTION()
 	void OpenClose(bool bIsOpen);
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
+	AElectricPanelStation* PanelStationStart;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
+	AElectricPanelStation* PanelStationEnd;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
+	bool PanelStartBool = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
+	bool PanelEndBool = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
+	bool SplineActivatableType = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
+	bool IsActive = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
+	TArray<AElectricPanel*> ActiveSplinePanels;
 private:
 	// Referencia cacheada al subsystem para desuscribir en EndPlay
-	class UElectricSplineOpneCloseSubsystem* CachedSubsystem = nullptr;
+	class UElectricSplineOpenCloseSubsystem* CachedSubsystem = nullptr;
 };

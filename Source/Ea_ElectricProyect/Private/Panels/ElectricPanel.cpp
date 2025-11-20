@@ -1,13 +1,13 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ElectricPanel.h"
-#include "ElectricPanelStation.h"
+#include "Panels/ElectricPanel.h"
+#include "Panels/ElectricPanelStation.h"
 #include "ElectricCharacter.h"
 #include "ElectricSpline.h"
-#include "CameraLookAtSpline.h"
+#include "Cameras/CameraLookAtSpline.h"
 #include "Ea_ElectricProyectPlayerController.h"
-#include "ElectricLookAtCamera.h"
+#include "Cameras/ElectricLookAtCamera.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/SplineComponent.h"
@@ -217,6 +217,13 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtS
 		return;
 	if (!ElectricPanelStationOn->Splines.IsValidIndex(ControlIndex) || !ElectricPanelStationOn->Splines[ControlIndex])
 		return;
+	if(ElectricPanelStationOn->Splines[ControlIndex]->SplineActivatableType == true)
+	{
+		if(ElectricPanelStationOn->Splines[ControlIndex]->IsActive == false)
+		{
+			return;
+		}
+	}
 	AElectricSpline* SplineActor = ElectricPanelStationOn->Splines[ControlIndex];
 	USplineComponent* SplineComp = SplineActor->FindComponentByClass<USplineComponent>();
 	if (!SplineComp) return;

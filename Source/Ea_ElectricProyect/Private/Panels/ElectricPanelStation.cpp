@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ElectricPanelStation.h"
-#include "ElectricPanel.h"
+#include "Panels/ElectricPanelStation.h"
+#include "Panels/ElectricPanel.h"
 #include "ElectricSpline.h"
 
 // Sets default values

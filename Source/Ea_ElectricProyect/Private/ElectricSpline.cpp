@@ -4,7 +4,6 @@
 #include "Components/SplineComponent.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
-#include "EventActors/ElectricSplineOpneCloseSubsystem.h"
 
 // Sets default values
 AElectricSpline::AElectricSpline()
@@ -20,30 +19,10 @@ AElectricSpline::AElectricSpline()
 void AElectricSpline::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (UWorld* World = GetWorld())
-	{
-		if (UGameInstance* GI = World->GetGameInstance())
-		{
-			CachedSubsystem = GI->GetSubsystem<UElectricSplineOpneCloseSubsystem>();
-			if (CachedSubsystem)
-			{
-				// Suscribirse al evento dinámico
-				CachedSubsystem->OnSplineOpenClose.AddDynamic(this, &AElectricSpline::OpenClose);
-			}
-		}
-	}
 }
 
 void AElectricSpline::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	// Desuscribirse para evitar callbacks a objetos destruidos
-	if (CachedSubsystem)
-	{
-		CachedSubsystem->OnSplineOpenClose.RemoveDynamic(this, &AElectricSpline::OpenClose);
-		CachedSubsystem = nullptr;
-	}
-
 	Super::EndPlay(EndPlayReason);
 }
 
