@@ -392,7 +392,7 @@ void AWallEParent::OnPickDownStarted()
 
 	AElectricPanelStation* Station = Cast<AElectricPanelStation>(OverlapActors[0]);
 
-	if (Station && HeldPanel)
+	if (Station && HeldPanel && !IsValid(Station->ElectricPanelClass))
 	{
 		// Snap the held panel to the station's world transform (position + rotation)
 		HeldPanel->SetActorLocationAndRotation(Station->GetActorLocation(), Station->GetActorRotation());
