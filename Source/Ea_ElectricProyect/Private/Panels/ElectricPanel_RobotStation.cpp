@@ -6,7 +6,7 @@
 #include "GameFramework/PlayerController.h"
 
 
-void AElectricPanel_RobotStation::OnInteract_Implementation()
+void AElectricPanel_RobotStation::OnInteract()
 {
 
 	// Only pure C++ instances reach this point.

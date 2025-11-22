@@ -139,7 +139,7 @@ void AElectricPanel::OnInputRight()
     SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnRight);
 }
 
-void AElectricPanel::OnInteract_Implementation()
+void AElectricPanel::OnInteract()
 {
 	UE_LOG(LogTemp, Log, TEXT("AElectricPanel::OnInteract() - Interact completado"));
 }

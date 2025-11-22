@@ -4,6 +4,7 @@
 #include "Components/SplineComponent.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
+#include "Panels/ElectricPanelChangeWire.h"
 
 // Sets default values
 AElectricSpline::AElectricSpline()
@@ -19,6 +20,15 @@ AElectricSpline::AElectricSpline()
 void AElectricSpline::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Suscribir OpenClose a todos los paneles de cambio de cable
+	for (AElectricPanelChangeWire* Panel : ChangeWirePanels)
+	{
+		if (Panel)
+		{
+			Panel->OnWireInteract.AddUObject(this, &AElectricSpline::OpenClose);
+		}
+	}
 }
 
 void AElectricSpline::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -32,8 +42,8 @@ void AElectricSpline::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AElectricSpline::OpenClose(bool bIsOpen)
+void AElectricSpline::OpenClose()
 {
-	UE_LOG(LogTemp, Log, TEXT("%s::OpenClose -> %s"), *GetName(), bIsOpen ? TEXT("Open") : TEXT("Close"));
+	IsActive = !IsActive;
 }
 

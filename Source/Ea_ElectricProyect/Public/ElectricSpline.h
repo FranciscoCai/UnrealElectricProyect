@@ -9,6 +9,7 @@
 class USplineComponent;
 class AElectricPanelStation;
 class AElectricPanel;
+class AElectricPanelChangeWire;
 
 UCLASS()
 class EA_ELECTRICPROYECT_API AElectricSpline : public AActor
@@ -33,7 +34,7 @@ public:
 
 	// Handler que se une al evento (debe ser UFUNCTION para AddDynamic)
 	UFUNCTION()
-	void OpenClose(bool bIsOpen);
+	void OpenClose();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
 	AElectricPanelStation* PanelStationStart;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
@@ -47,7 +48,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PanelStation")
 	bool IsActive = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
-	TArray<AElectricPanel*> ActiveSplinePanels;
+	TArray<AElectricPanelChangeWire*> ChangeWirePanels;
 private:
 	// Referencia cacheada al subsystem para desuscribir en EndPlay
 	class UElectricSplineOpenCloseSubsystem* CachedSubsystem = nullptr;
