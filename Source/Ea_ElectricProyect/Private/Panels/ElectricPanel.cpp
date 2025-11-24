@@ -36,19 +36,6 @@ void AElectricPanel::BeginPlay()
 	{
 		PC->Possess(this);
 	}
-	if (PC && PC->GetPawn() == this)
-	{
-		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
-		{
-			if (UEnhancedInputLocalPlayerSubsystem* LocalSubsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
-			{
-				if (PanelMappingContext)
-				{
-					LocalSubsystem->AddMappingContext(PanelMappingContext, 0);
-				}
-			}
-		}
-	}
 }
 
 void AElectricPanel::PossessedBy(AController* NewController)
@@ -72,7 +59,7 @@ void AElectricPanel::PossessedBy(AController* NewController)
 			{
 				if (PanelMappingContext)
 				{
-					LocalSubsystem->AddMappingContext(PanelMappingContext, 0);
+					LocalSubsystem->AddMappingContext(PanelMappingContext, 1);
 				}
 			}
 		}
