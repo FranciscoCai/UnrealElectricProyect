@@ -49,6 +49,8 @@ public:
 	bool IsActive = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
 	TArray<AElectricPanelChangeWire*> ChangeWirePanels;
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category ="Panel" )
+	void OpenCloseBP();
 private:
 	// Referencia cacheada al subsystem para desuscribir en EndPlay
 	class UElectricSplineOpenCloseSubsystem* CachedSubsystem = nullptr;

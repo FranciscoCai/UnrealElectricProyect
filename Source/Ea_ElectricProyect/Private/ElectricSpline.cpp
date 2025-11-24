@@ -45,5 +45,6 @@ void AElectricSpline::Tick(float DeltaTime)
 void AElectricSpline::OpenClose()
 {
 	IsActive = !IsActive;
+	OpenCloseBP();
 }
 
