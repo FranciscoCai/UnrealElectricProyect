@@ -136,7 +136,7 @@ void AElectricPanel::OnInputRight()
 {
     if (!LimitRight) return;
     if (!ElectricPanelStationOn) return;
-    SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnRight, true);
+    SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnRight, false);
 }
 
 void AElectricPanel::OnInteract()
@@ -262,6 +262,17 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtS
 		NewCharacter->SetSpline(SplineComp, InitialDistance);
 		NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
 		NewCharacter->bReverseInputDirection = bReverseInput;
+
+		if (ControlIndex == 0 || ControlIndex == 2) // Up or Down -> keep vertical mapping
+		{
+			NewCharacter->MoveGoAction = NewCharacter->MoveUpAction;
+			NewCharacter->MoveBackAction = NewCharacter->MoveDownAction;
+		}
+		else
+		{
+			NewCharacter->MoveGoAction = NewCharacter->MoveRightAction;
+			NewCharacter->MoveBackAction = NewCharacter->MoveLeftAction;
+		}
 
 		if (APlayerController* PC = Cast<APlayerController>(GetController()))
 		{

@@ -47,20 +47,22 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputMappingContext* ElectricMoveMappingContext;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveGoAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveBackAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MoveUpAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MoveDownAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveRightAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveLeftAction;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	float MoveDirection = 0.f;
-
-private:
-	UPROPERTY()
-	USplineComponent* SplineToFollow = nullptr;
-
-	float CurrentDistanceOnSpline = 0.f;
-	bool bMovingOnSpline = false;
-
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputGoUp();
 	UFUNCTION(BlueprintCallable, Category = "Input")
@@ -69,6 +71,13 @@ private:
 	void OnInputGoDown();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputBackDown();
+private:
+	UPROPERTY()
+	USplineComponent* SplineToFollow = nullptr;
+
+	float CurrentDistanceOnSpline = 0.f;
+	bool bMovingOnSpline = false;
+
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void GetTargetpanel(int endStart);

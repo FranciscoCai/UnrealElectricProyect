@@ -53,10 +53,10 @@ void AElectricCharacter::Tick(float DeltaTime)
 		{
 			Direction *= -1.f;
 		}
-		//if(bReverseInputDirection)
-		//{
-		//	Direction *= -1.f;
-		//}
+		if(bReverseInputDirection)
+		{
+			Direction *= -1.f;
+		}
 
 		const float SplineLength = SplineToFollow->GetSplineLength();
 		float Delta = SplineMoveSpeed * DeltaTime * Direction;
@@ -89,10 +89,10 @@ void AElectricCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInput->BindAction(MoveUpAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputGoUp);
-		EnhancedInput->BindAction(MoveDownAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputBackUp);
-		EnhancedInput->BindAction(MoveUpAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputGoDown);
-		EnhancedInput->BindAction(MoveDownAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputBackDown);
+		EnhancedInput->BindAction(MoveGoAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputGoUp);
+		EnhancedInput->BindAction(MoveBackAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputBackUp);
+		EnhancedInput->BindAction(MoveGoAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputGoDown);
+		EnhancedInput->BindAction(MoveBackAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputBackDown);
 	}
 }
 
