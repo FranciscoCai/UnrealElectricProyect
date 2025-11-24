@@ -41,7 +41,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Electric")
 	bool bReverseSplineDirection = false;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	bool bReverseInputDirection = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputMappingContext* ElectricMoveMappingContext;

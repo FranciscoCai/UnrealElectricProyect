@@ -115,28 +115,28 @@ void AElectricPanel::OnInputUp()
 {
     if (!LimitUp) return;
     if (!ElectricPanelStationOn) return;
-    SpawnAndPossessCharacter(0, ElectricPanelStationOn->bSpawnUp);
+    SpawnAndPossessCharacter(0, ElectricPanelStationOn->bSpawnUp, false);
 }
 
 void AElectricPanel::OnInputLeft()
 {
     if (!LimitLeft) return;
     if (!ElectricPanelStationOn) return;
-    SpawnAndPossessCharacter(1, ElectricPanelStationOn->bSpawnLeft);
+    SpawnAndPossessCharacter(1, ElectricPanelStationOn->bSpawnLeft, true);
 }
 
 void AElectricPanel::OnInputDown()
 {
     if (!LimitDown) return;
     if (!ElectricPanelStationOn) return;
-    SpawnAndPossessCharacter(2, ElectricPanelStationOn->bSpawnDown);
+    SpawnAndPossessCharacter(2, ElectricPanelStationOn->bSpawnDown, true);
 }
 
 void AElectricPanel::OnInputRight()
 {
     if (!LimitRight) return;
     if (!ElectricPanelStationOn) return;
-    SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnRight);
+    SpawnAndPossessCharacter(3, ElectricPanelStationOn->bSpawnRight, true);
 }
 
 void AElectricPanel::OnInteract()
@@ -210,7 +210,7 @@ void AElectricPanel::OnInteractTimerFinished()
 	OnInteract();
 }
 
-void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtStart)
+void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtStart, bool bReverseInput)
 {
 	// Validate pointers/indices in a safe order to avoid dereferencing null.
 	if (!ElectricCharacterClass || !ElectricPanelStationOn)
@@ -261,6 +261,7 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtS
 	{
 		NewCharacter->SetSpline(SplineComp, InitialDistance);
 		NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
+		NewCharacter->bReverseInputDirection = bReverseInput;
 
 		if (APlayerController* PC = Cast<APlayerController>(GetController()))
 		{

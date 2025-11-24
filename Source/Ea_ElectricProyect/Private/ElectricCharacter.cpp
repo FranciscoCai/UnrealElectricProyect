@@ -49,10 +49,14 @@ void AElectricCharacter::Tick(float DeltaTime)
 	{
 		float Direction = MoveDirection;
 		// Si bReverseSplineDirection es true (positivo), invierte la direcci¨®n
-		if (bReverseSplineDirection)
+		if(bReverseSplineDirection)
 		{
 			Direction *= -1.f;
 		}
+		//if(bReverseInputDirection)
+		//{
+		//	Direction *= -1.f;
+		//}
 
 		const float SplineLength = SplineToFollow->GetSplineLength();
 		float Delta = SplineMoveSpeed * DeltaTime * Direction;

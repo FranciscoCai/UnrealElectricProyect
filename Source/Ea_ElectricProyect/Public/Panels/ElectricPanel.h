@@ -65,7 +65,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Direction")
 	bool LimitRight = true;
 
-	void SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtStart);
+	void SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtStart, bool bReverseInput);
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;
 
