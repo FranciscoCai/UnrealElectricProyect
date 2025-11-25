@@ -399,6 +399,11 @@ void AWallEParent::OnPickDownStarted()
 		Station -> SetelectricPanelInformation(HeldPanel);
 		Station->SetelectricStationPanelInformation(HeldPanel);
 		Station->UpdateSplinesPanelStation();
+		if (AElectricPanelPickable* HeldPanelPickable = Cast<AElectricPanelPickable>(HeldPanel))
+		{
+			HeldPanelPickable->OnSnapPanelEvent();
+		}
+
 	}
 
 	HeldPanel = nullptr;
