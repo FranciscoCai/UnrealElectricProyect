@@ -57,9 +57,19 @@ void AElectricPanel::PossessedBy(AController* NewController)
 		{
 			if (UEnhancedInputLocalPlayerSubsystem* LocalSubsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 			{
-				if (PanelMappingContext)
+				if (AEa_ElectricProyectPlayerController* EaPC = Cast<AEa_ElectricProyectPlayerController>(PC))
 				{
-					LocalSubsystem->AddMappingContext(PanelMappingContext, 1);
+					if (EaPC)
+					{
+						if (EaPC->ElectricMoveMappingContext)
+						{
+							LocalSubsystem->AddMappingContext(EaPC->ElectricMoveMappingContext, 0);
+						}
+						if (EaPC->PanelMappingContext)
+						{
+							LocalSubsystem->AddMappingContext(EaPC->PanelMappingContext, 1);
+						}
+					}
 				}
 			}
 		}
@@ -83,13 +93,16 @@ void AElectricPanel::Tick(float DeltaTime)
 void AElectricPanel::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	AEa_ElectricProyectPlayerController* EaPC = Cast<AEa_ElectricProyectPlayerController>(GetController());
 	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInput->BindAction(MoveUpAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputUp);
-		EnhancedInput->BindAction(MoveDownAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputDown);
-		EnhancedInput->BindAction(MoveRightAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputRight);
-		EnhancedInput->BindAction(MoveLeftAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputLeft);
+		if(EaPC)
+		{
+			EnhancedInput->BindAction(EaPC->MoveUpAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputUp);
+			EnhancedInput->BindAction(EaPC->MoveDownAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputDown);
+			EnhancedInput->BindAction(EaPC->MoveRightAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputRight);
+			EnhancedInput->BindAction(EaPC->MoveLeftAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputLeft);
+		}
 
 		// Bind de Interact: Started -> BeginInteract, Canceled -> CancelInteract
 		EnhancedInput->BindAction(Interact, ETriggerEvent::Started, this, &AElectricPanel::BeginInteract);
@@ -243,8 +256,8 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtS
 	SpawnParams.Owner = this;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AElectricCharacter* NewCharacter = GetWorld()->SpawnActor<AElectricCharacter>(ElectricCharacterClass, SpawnLocation, SpawnRotation, SpawnParams);
-			
-	if (NewCharacter)
+	AEa_ElectricProyectPlayerController* EaPC = Cast<AEa_ElectricProyectPlayerController>(GetController());
+	if (NewCharacter && EaPC)
 	{
 		NewCharacter->SetSpline(SplineComp, InitialDistance);
 		NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
@@ -252,17 +265,18 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtS
 
 		if (ControlIndex == 0 || ControlIndex == 2) // Up or Down -> keep vertical mapping
 		{
-			NewCharacter->MoveGoAction = NewCharacter->MoveUpAction;
-			NewCharacter->MoveBackAction = NewCharacter->MoveDownAction;
+			NewCharacter->MoveGoAction = EaPC->MoveUpAction;
+			NewCharacter->MoveBackAction = EaPC->MoveDownAction;
 		}
 		else
 		{
-			NewCharacter->MoveGoAction = NewCharacter->MoveRightAction;
-			NewCharacter->MoveBackAction = NewCharacter->MoveLeftAction;
+			NewCharacter->MoveGoAction = EaPC->MoveRightAction;
+			NewCharacter->MoveBackAction = EaPC->MoveLeftAction;
 		}
 
 		if (APlayerController* PC = Cast<APlayerController>(GetController()))
 		{
+			poseElectricCharacter = true;
 			PC->Possess(NewCharacter);
 		}
 	}
@@ -298,9 +312,26 @@ void AElectricPanel::UnPossessed()
 	if (!LocalPlayer) return;
 
 	UEnhancedInputLocalPlayerSubsystem* LocalSubsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
-	if (LocalSubsystem && PanelMappingContext)
+	if (LocalSubsystem)
 	{
-		LocalSubsystem->RemoveMappingContext(PanelMappingContext);
+		if (AEa_ElectricProyectPlayerController* EaPC = Cast<AEa_ElectricProyectPlayerController>(PC))
+		{
+			if (EaPC)
+			{
+				if (EaPC->ElectricMoveMappingContext&& !poseElectricCharacter)
+				{
+					LocalSubsystem->RemoveMappingContext(EaPC->ElectricMoveMappingContext);
+				}
+				else
+				{
+					poseElectricCharacter = false;
+				}
+				if (EaPC->PanelMappingContext)
+				{
+					LocalSubsystem->RemoveMappingContext(EaPC->PanelMappingContext);
+				}
+			}
+		}
 	}
 }
 

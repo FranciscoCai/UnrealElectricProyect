@@ -57,4 +57,20 @@ public:
 	AElectricLookAtCamera* LookAtOn;
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "RobotStation")
 	void ChangeCameraStart(AMainCamera* CamaraToChange, float TransitionDuration);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputMappingContext* ElectricMoveMappingContext;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputMappingContext* PanelMappingContext;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputMappingContext* ElectricInteractMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveUpAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveDownAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveRightAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* MoveLeftAction;
 };

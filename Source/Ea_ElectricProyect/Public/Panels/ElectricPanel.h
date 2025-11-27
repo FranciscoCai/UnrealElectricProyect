@@ -42,17 +42,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pose")
 	bool poseOnStart = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
-	UInputMappingContext* PanelMappingContext;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
-	UInputAction* MoveUpAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
-	UInputAction* MoveDownAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	UInputAction* MoveRightAction;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
-	UInputAction* MoveLeftAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* Interact;
 
@@ -77,13 +66,6 @@ public:
 	void OnInputRight();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputLeft();
-
-protected:
-	// Make overridable by C++ subclasses: this is called WHEN se completa el hold.
-	// Los hijos deben sobreescribir esta funci¨®n para ejecutar su comportamiento.
-	virtual void OnInteract();
-
-	// --- Hold-to-interact implementation (base class) ---
 public:
 	// Tiempo requerido (segundos) para mantener Interact antes de ejecutar OnInteract.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta=(ClampMin="0.0"))
@@ -114,4 +96,9 @@ protected:
 
 	// Callback cuando termina el timer
 	void OnInteractTimerFinished();
+
+	virtual void OnInteract();
+
+private:
+	bool poseElectricCharacter = false;
 };
