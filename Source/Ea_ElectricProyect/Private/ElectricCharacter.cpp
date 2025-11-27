@@ -12,6 +12,7 @@
 #include "Panels/ElectricPanelStation.h" 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Ea_ElectricProyectPlayerController.h"
 
 // Sets default values
 AElectricCharacter::AElectricCharacter()
@@ -25,19 +26,6 @@ AElectricCharacter::AElectricCharacter()
 void AElectricCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-
-	if (PC)
-	{
-		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
-		{
-			if (UEnhancedInputLocalPlayerSubsystem* LocalSubsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
-			{
-				// Aseg¨²rate de tener una variable UPROPERTY para tu MappingContext
-				LocalSubsystem->AddMappingContext(ElectricMoveMappingContext, 0);
-			}
-		}
-	}
 }
 
 // Called every frame
@@ -89,10 +77,10 @@ void AElectricCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInput->BindAction(MoveGoAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputGoUp);
-		EnhancedInput->BindAction(MoveBackAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputBackUp);
-		EnhancedInput->BindAction(MoveGoAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputGoDown);
-		EnhancedInput->BindAction(MoveBackAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputBackDown);
+			EnhancedInput->BindAction(MoveGoAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputGoUp);
+			EnhancedInput->BindAction(MoveBackAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputBackUp);
+			EnhancedInput->BindAction(MoveGoAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputGoDown);
+			EnhancedInput->BindAction(MoveBackAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputBackDown);
 	}
 }
 
@@ -140,8 +128,46 @@ void AElectricCharacter::OnInputBackDown()
 		MoveDirection = 0;
 	}
 }
+
+
+void AElectricCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	{
+		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
+		{
+			if (UEnhancedInputLocalPlayerSubsystem* LocalSubsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+			{
+				if (AEa_ElectricProyectPlayerController* EaPC = Cast<AEa_ElectricProyectPlayerController>(PC))
+				{
+					if (EaPC && EaPC->ElectricMoveMappingContext)
+					{
+						LocalSubsystem->AddMappingContext(EaPC->ElectricInteractMappingContext,0);
+					}
+				}
+			}
+		}
+	}
+}
 void AElectricCharacter::UnPossessed()
 {
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	{
+		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
+		{
+			if (UEnhancedInputLocalPlayerSubsystem* LocalSubsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+			{
+				if (AEa_ElectricProyectPlayerController* EaPC = Cast<AEa_ElectricProyectPlayerController>(PC))
+				{
+					if (EaPC && EaPC->ElectricMoveMappingContext)
+					{
+						LocalSubsystem->RemoveMappingContext(EaPC->ElectricInteractMappingContext);
+					}
+				}
+			}
+		}
+	}
 }
 
 void AElectricCharacter::GetTargetpanel(int endStart)
