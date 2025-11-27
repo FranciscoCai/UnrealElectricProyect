@@ -98,12 +98,6 @@ void AElectricCharacter::SetSpline(USplineComponent* InSpline, float InitialDist
 	}
 }
 
-
-
-//UE_LOG(LogTemp, Warning, TEXT("2222"));
-
-
-
 void AElectricCharacter::OnInputGoUp()
 {
     MoveDirection = 1.f; // Mover hacia adelante

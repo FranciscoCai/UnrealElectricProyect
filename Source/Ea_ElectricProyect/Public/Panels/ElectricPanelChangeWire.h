@@ -6,7 +6,7 @@
 #include "Panels/ElectricPanelPickable.h"
 #include "ElectricPanelChangeWire.generated.h"
 
-// Evento sin par¨¢metros
+// Evento sin parámetros
 DECLARE_EVENT(AElectricPanelChangeWire, FOnWireInteract)
 
 UCLASS()
@@ -16,8 +16,7 @@ class EA_ELECTRICPROYECT_API AElectricPanelChangeWire : public AElectricPanelPic
 public:
 	FOnWireInteract OnWireInteract;
 
+	// Expose to Blueprints so you can call it from BP graphs
+	UFUNCTION(BlueprintCallable, Category = "ElectricPanel")
 	void BroadcastWireInteract();
-
-protected:
-	virtual void OnInteract() override;
 };

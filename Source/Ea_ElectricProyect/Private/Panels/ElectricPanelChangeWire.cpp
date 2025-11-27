@@ -3,10 +3,6 @@
 
 #include "Panels/ElectricPanelChangeWire.h"
 
-void AElectricPanelChangeWire::OnInteract()
-{
-	BroadcastWireInteract();
-}
 
 void AElectricPanelChangeWire::BroadcastWireInteract()
 {
