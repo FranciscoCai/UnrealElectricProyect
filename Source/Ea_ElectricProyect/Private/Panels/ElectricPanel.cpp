@@ -278,11 +278,11 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtS
 		{
 			poseElectricCharacter = true;
 			PC->Possess(NewCharacter);
-			if (ControlIndex == 0 || ControlIndex == 2)
+			if (ControlIndex == 0 || ControlIndex == 3)
 			{
 				NewCharacter->OnInputGoUp();
 			}
-			else if(ControlIndex == 1 || ControlIndex == 3)
+			else if(ControlIndex == 1 || ControlIndex == 2)
 			{
 				NewCharacter->OnInputBackUp();
 			}
