@@ -92,6 +92,10 @@ void AWallEParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		{
 			EnhancedInput->BindAction(PressQ, ETriggerEvent::Started, this, &AWallEParent::OnPressQ);
 		}
+		if (WallELook)
+		{
+			EnhancedInput->BindAction(WallELook, ETriggerEvent::Triggered, this, &AWallEParent::OnLookInput);
+		}
 	}
 }
 
@@ -420,5 +424,16 @@ void AWallEParent::OnPressQ()
 void AWallEParent::OnMoveReleased(const FInputActionValue& Value)
 {
 	MovementSpeed = 0.0f;
+}
+
+void AWallEParent::OnLookInput(const FInputActionValue& Value)
+{
+    if (CameraToChange)
+    {
+        if (AWallECamera* WallECam = Cast<AWallECamera>(CameraToChange))
+        {
+            WallECam->AddOrbitInput(Value.Get<FVector2D>());
+        }
+    }
 }
 
