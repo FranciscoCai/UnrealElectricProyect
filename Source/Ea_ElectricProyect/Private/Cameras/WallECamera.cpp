@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Cameras/WallECamera.h"
-#include "Kismet/GameplayStatics.h"
-#include "GameFramework/PlayerController.h"
-#include "GameFramework/Pawn.h"
 #include "Camera/CameraComponent.h"
-#include "Math/UnrealMathUtility.h"
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
+#include "GameFramework/Actor.h"
+#include "CollisionQueryParams.h"
 
 AWallECamera::AWallECamera()
 {
@@ -15,55 +15,69 @@ AWallECamera::AWallECamera()
 void AWallECamera::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (IsValid(TargetActor) && FollowCamera)
+	{
+		// Guarda la diferencia de altura inicial entre c芍mara y robot
+		InitialZOffset = FollowCamera->GetComponentLocation().Z - TargetActor->GetActorLocation().Z;
+	}
+}
+
+void AWallECamera::AddOrbitInput(FVector2D Input)
+{
+	OrbitYaw += Input.X * 2.0f;   // Sensibilidad ajustable
+	OrbitPitch = FMath::Clamp(OrbitPitch - Input.Y * 2.0f, -80.0f, 80.0f);
 }
 
 void AWallECamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (CachedPlayerController == nullptr)
-	{
-		CachedPlayerController = GetWorld()->GetFirstPlayerController();
-	}
-
 	if (!IsValid(TargetActor)) return;
-	if (!bEnableFollowArea) return;
-	if (bIsTransitioning) return;
 
-	const FVector CamLocation = FollowCamera->GetComponentLocation(); // Usar la c芍mara f赤sica
-	const FVector TargetLocation = TargetActor->GetActorLocation();
+	FVector TargetLocation = TargetActor->GetActorLocation();
+	float YawRad = FMath::DegreesToRadians(OrbitYaw);
+	float PitchRad = FMath::DegreesToRadians(OrbitPitch);
 
-	const float Distance2D = FVector::Dist2D(CamLocation, TargetLocation);
+	FVector Offset;
+	Offset.X = OrbitDistance * FMath::Cos(PitchRad) * FMath::Cos(YawRad);
+	Offset.Y = OrbitDistance * FMath::Cos(PitchRad) * FMath::Sin(YawRad);
+	Offset.Z = OrbitDistance * FMath::Sin(PitchRad);
 
-	if (Distance2D > FollowAreaRadius && FollowAreaRadius > 0.0f)
+	FVector DesiredCameraLocation = TargetLocation - Offset;
+	DesiredCameraLocation.Z = TargetLocation.Z + InitialZOffset;
+
+	// --- Comprobaci車n de colisi車n para evitar atravesar paredes ---
+	FHitResult HitResult;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	if (TargetActor)
 	{
-		const FVector2D CamXY(CamLocation.X, CamLocation.Y);
-		const FVector2D TargetXY(TargetLocation.X, TargetLocation.Y);
-
-		FVector2D Dir2D = TargetXY - CamXY;
-		if (!Dir2D.IsNearlyZero())
-		{
-			Dir2D.Normalize();
-			const FVector2D DesiredXY = TargetXY - Dir2D * FollowAreaRadius;
-			const FVector DesiredLocation(DesiredXY.X, DesiredXY.Y, CamLocation.Z);
-
-			const FVector NewLocation = FMath::VInterpTo(CamLocation, DesiredLocation, DeltaTime, MoveInterpSpeed);
-			FollowCamera->SetWorldLocation(NewLocation); // Solo mueve la c芍mara
-		}
+		Params.AddIgnoredActor(TargetActor);
 	}
 
-	// Rotaci車n de la c芍mara para mirar al target
-	if (bLookAtTarget && TargetActor)
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		TargetLocation,
+		DesiredCameraLocation,
+		ECC_Visibility,
+		Params
+	);
+
+	FVector FinalCameraLocation = DesiredCameraLocation;
+	if (bHit)
 	{
-		const FVector CurrentCamLocation = FollowCamera->GetComponentLocation();
-		const FVector ToTarget = TargetLocation - CurrentCamLocation;
-		if (!ToTarget.IsNearlyZero())
-		{
-			FRotator DesiredRot = ToTarget.Rotation();
-			DesiredRot.Roll = 0.0f;
-			const FRotator NewRot = FMath::RInterpTo(FollowCamera->GetComponentRotation(), DesiredRot, DeltaTime, LookInterpSpeed);
-			FollowCamera->SetWorldRotation(NewRot); // Solo rota la c芍mara
-		}
+		// Coloca la c芍mara justo antes de la colisi車n
+		FinalCameraLocation = HitResult.Location + HitResult.Normal * 10.0f; // 10 unidades de separaci車n
 	}
+
+	FollowCamera->SetWorldLocation(FinalCameraLocation);
+
+	FRotator CameraRot = (TargetLocation - FinalCameraLocation).Rotation();
+	FollowCamera->SetWorldRotation(CameraRot);
+
+	// Opcional: dibuja el trazo para depuraci車n
+	// DrawDebugLine(GetWorld(), TargetLocation, FinalCameraLocation, FColor::Red, false, 0.1f, 0, 2.0f);
 }
+
 

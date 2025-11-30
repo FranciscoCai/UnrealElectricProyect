@@ -130,4 +130,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnMoveReleased(const FInputActionValue& Value);
+
+protected:
+    /** Called por Enhanced Input cuando se recibe WallELook (Vector2D) */
+    UFUNCTION()
+    void OnLookInput(const FInputActionValue& Value);
 };

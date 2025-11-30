@@ -1,10 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "MainCamera.h"
-#include "GameFramework/Pawn.h"
 #include "WallECamera.generated.h"
 
 class APawn;
@@ -27,27 +26,26 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	/** Target pawn to keep within the follow area (can be set in editor). If null, will try to use the player's pawn. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Follow")
+	/** Pawn objetivo a orbitar (debe asignarse en el editor o en runtime) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
 	APawn* TargetActor = nullptr;
 
-	/** Radius (world units) of the allowed area around the target. Camera will move if distance > this radius. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Follow", meta = (ClampMin = "0.0"))
-	float FollowAreaRadius = 600.0f;
+	/** Ángulo yaw de la órbita */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
+	float OrbitYaw = 0.0f;
 
-	/** Interp speed used when moving the camera toward the allowed area boundary. Higher = faster. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Follow", meta = (ClampMin = "0.0"))
-	float MoveInterpSpeed = 6.0f;
+	/** Ángulo pitch de la órbita */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
+	float OrbitPitch = 10.0f;
 
-	/** When false, the camera will not try to correct its position. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Follow")
-	bool bEnableFollowArea = true;
+	/** Distancia de la cámara al objetivo */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
+	float OrbitDistance = 400.0f;
 
-	/** If true, camera will rotate to look at the TargetActor. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Look")
-	bool bLookAtTarget = true;
+	/** Llama esto desde el input para rotar la cámara */
+	void AddOrbitInput(FVector2D Input);
 
-	/** Interp speed for looking at the target (higher = faster). */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Look", meta = (ClampMin = "0.0"))
-	float LookInterpSpeed = 6.0f;
+protected:
+	// Diferencia de altura inicial entre cámara y robot
+	float InitialZOffset = 0.0f;
 };
