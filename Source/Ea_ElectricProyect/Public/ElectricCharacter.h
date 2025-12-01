@@ -55,10 +55,10 @@ public:
 	void OnInputGoUp();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputBackUp();
-	UFUNCTION(BlueprintCallable, Category = "Input")
-	void OnInputGoDown();
-	UFUNCTION(BlueprintCallable, Category = "Input")
-	void OnInputBackDown();
+	//UFUNCTION(BlueprintCallable, Category = "Input")
+	//void OnInputGoDown();
+	//UFUNCTION(BlueprintCallable, Category = "Input")
+	//void OnInputBackDown();
 private:
 	UPROPERTY()
 	USplineComponent* SplineToFollow = nullptr;

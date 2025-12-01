@@ -263,16 +263,16 @@ void AElectricPanel::SpawnAndPossessCharacter(int32 ControlIndex, bool bSpawnAtS
 		NewCharacter->bReverseSplineDirection = !bSpawnAtStart;
 		NewCharacter->bReverseInputDirection = bReverseInput;
 
-		if (ControlIndex == 0 || ControlIndex == 2) // Up or Down -> keep vertical mapping
-		{
-			NewCharacter->MoveGoAction = EaPC->MoveUpAction;
-			NewCharacter->MoveBackAction = EaPC->MoveDownAction;
-		}
-		else
-		{
-			NewCharacter->MoveGoAction = EaPC->MoveRightAction;
-			NewCharacter->MoveBackAction = EaPC->MoveLeftAction;
-		}
+		//if (ControlIndex == 0 || ControlIndex == 2) // Up or Down -> keep vertical mapping
+		//{
+		//	NewCharacter->MoveGoAction = EaPC->MoveUpAction;
+		//	NewCharacter->MoveBackAction = EaPC->MoveDownAction;
+		//}
+		//else
+		//{
+		//	NewCharacter->MoveGoAction = EaPC->MoveRightAction;
+		//	NewCharacter->MoveBackAction = EaPC->MoveLeftAction;
+		//}
 
 		if (APlayerController* PC = Cast<APlayerController>(GetController()))
 		{

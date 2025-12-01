@@ -75,13 +75,13 @@ void AElectricCharacter::Tick(float DeltaTime)
 void AElectricCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
-	{
-			EnhancedInput->BindAction(MoveGoAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputGoUp);
-			EnhancedInput->BindAction(MoveBackAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputBackUp);
-			EnhancedInput->BindAction(MoveGoAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputGoDown);
-			EnhancedInput->BindAction(MoveBackAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputBackDown);
-	}
+	//if (UEnhancedInputComponent* EnhancedInput = Cast<UEnhancedInputComponent>(PlayerInputComponent))
+	//{
+	//		EnhancedInput->BindAction(MoveGoAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputGoUp);
+	//		EnhancedInput->BindAction(MoveBackAction, ETriggerEvent::Started, this, &AElectricCharacter::OnInputBackUp);
+	//		EnhancedInput->BindAction(MoveGoAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputGoDown);
+	//		EnhancedInput->BindAction(MoveBackAction, ETriggerEvent::Canceled, this, &AElectricCharacter::OnInputBackDown);
+	//}
 }
 
 void AElectricCharacter::SetSpline(USplineComponent* InSpline, float InitialDistance)
@@ -107,21 +107,21 @@ void AElectricCharacter::OnInputBackUp()
 {
     MoveDirection = -1.f; // Mover hacia atr¨¢s
 }
-void AElectricCharacter::OnInputGoDown()
-{
-	if (MoveDirection > 0)
-	{
-		MoveDirection = 0;
-    }
-}
-
-void AElectricCharacter::OnInputBackDown()
-{
-	if (MoveDirection < 0)
-	{
-		MoveDirection = 0;
-	}
-}
+//void AElectricCharacter::OnInputGoDown()
+//{
+//	if (MoveDirection > 0)
+//	{
+//		MoveDirection = 0;
+//    }
+//}
+//
+//void AElectricCharacter::OnInputBackDown()
+//{
+//	if (MoveDirection < 0)
+//	{
+//		MoveDirection = 0;
+//	}
+//}
 
 
 void AElectricCharacter::PossessedBy(AController* NewController)
