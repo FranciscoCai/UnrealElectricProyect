@@ -66,7 +66,29 @@ public:
 	void OnInputRight();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputLeft();
-public:
+
+	// Release handlers for directional inputs (cancel the directional hold)
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInputUpReleased();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInputDownReleased();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInputRightReleased();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInputLeftReleased();
+
+	// Duration required to hold a directional input before spawning
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta=(ClampMin="0.0"))
+	float DirectionalHoldDuration = 0.3f;
+
+protected:
+	// Timer & pending state for directional hold-to-spawn
+	FTimerHandle DirectionalHoldTimerHandle;
+	int32 PendingDirectionalControlIndex = -1;
+	bool bPendingDirectionalSpawnAtStart = false;
+	bool bPendingDirectionalReverseInput = false;
+	bool bHasPendingDirectionalSpawn = false;
+
 	// Tiempo requerido (segundos) para mantener Interact antes de ejecutar OnInteract.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta=(ClampMin="0.0"))
 	float InteractHoldDuration = 1.5f;
@@ -98,6 +120,18 @@ protected:
 	void OnInteractTimerFinished();
 
 	virtual void OnInteract();
+
+	// Callback cuando termina el timer direccional
+	void OnDirectionalHoldFinished();
+	// Cancela hold direccional
+	void CancelDirectionalHold();
+
+protected:
+	// Pending spawn data when a directional input started hold
+	int32 PendingControlIndex = -1;
+	bool bPendingSpawnAtStart = false;
+	bool bPendingReverseInput = false;
+	bool bHasPendingSpawn = false;
 
 private:
 	bool poseElectricCharacter = false;
