@@ -132,7 +132,7 @@ void AElectricPanel::OnInputUp()
 
     if (GetWorld())
     {
-        GetWorldTimerManager().ClearTimer(DirectionalHoldTimerHandle);
+		CancelDirectionalHold();
         GetWorldTimerManager().SetTimer(DirectionalHoldTimerHandle, this, &AElectricPanel::OnDirectionalHoldFinished, DirectionalHoldDuration, false);
     }
 }
@@ -149,7 +149,8 @@ void AElectricPanel::OnInputLeft()
 
     if (GetWorld())
     {
-        GetWorldTimerManager().ClearTimer(DirectionalHoldTimerHandle);
+
+		CancelDirectionalHold();
         GetWorldTimerManager().SetTimer(DirectionalHoldTimerHandle, this, &AElectricPanel::OnDirectionalHoldFinished, DirectionalHoldDuration, false);
     }
 }
@@ -166,7 +167,7 @@ void AElectricPanel::OnInputDown()
 
     if (GetWorld())
     {
-        GetWorldTimerManager().ClearTimer(DirectionalHoldTimerHandle);
+		CancelDirectionalHold();
         GetWorldTimerManager().SetTimer(DirectionalHoldTimerHandle, this, &AElectricPanel::OnDirectionalHoldFinished, DirectionalHoldDuration, false);
     }
 }
@@ -183,7 +184,7 @@ void AElectricPanel::OnInputRight()
 
     if (GetWorld())
     {
-        GetWorldTimerManager().ClearTimer(DirectionalHoldTimerHandle);
+		CancelDirectionalHold();
         GetWorldTimerManager().SetTimer(DirectionalHoldTimerHandle, this, &AElectricPanel::OnDirectionalHoldFinished, DirectionalHoldDuration, false);
     }
 }
@@ -193,7 +194,8 @@ void AElectricPanel::OnInputUpReleased()
     // Only cancel if the released key is the one currently pending
     if (bHasPendingDirectionalSpawn && PendingDirectionalControlIndex == 0)
     {
-        CancelDirectionalHold();
+		bHasPendingDirectionalSpawn = false;
+		PendingDirectionalControlIndex = -1;
     }
 }
 
@@ -201,7 +203,8 @@ void AElectricPanel::OnInputLeftReleased()
 {
     if (bHasPendingDirectionalSpawn && PendingDirectionalControlIndex == 1)
     {
-        CancelDirectionalHold();
+		bHasPendingDirectionalSpawn = false;
+		PendingDirectionalControlIndex = -1;
     }
 }
 
@@ -209,7 +212,8 @@ void AElectricPanel::OnInputDownReleased()
 {
     if (bHasPendingDirectionalSpawn && PendingDirectionalControlIndex == 2)
     {
-        CancelDirectionalHold();
+		bHasPendingDirectionalSpawn = false;
+		PendingDirectionalControlIndex = -1;
     }
 }
 
@@ -217,7 +221,8 @@ void AElectricPanel::OnInputRightReleased()
 {
     if (bHasPendingDirectionalSpawn && PendingDirectionalControlIndex == 3)
     {
-        CancelDirectionalHold();
+		bHasPendingDirectionalSpawn = false;
+		PendingDirectionalControlIndex = -1;
     }
 }
 
@@ -230,7 +235,7 @@ void AElectricPanel::OnDirectionalHoldFinished()
 	bool bSpawnAtStart = bPendingDirectionalSpawnAtStart;
 	bool bReverseInput = bPendingDirectionalReverseInput;
 
-	// clear pending state
+	CancelDirectionalHold();
 	bHasPendingDirectionalSpawn = false;
 	PendingDirectionalControlIndex = -1;
 
@@ -244,8 +249,10 @@ void AElectricPanel::CancelDirectionalHold()
 	{
 		GetWorldTimerManager().ClearTimer(DirectionalHoldTimerHandle);
 	}
-	bHasPendingDirectionalSpawn = false;
-	PendingDirectionalControlIndex = -1;
+	if (PendingDirectionalControlIndex == 0) { CancelDirectionBP(0); }
+	else if (PendingDirectionalControlIndex == 1) { CancelDirectionBP(1); }
+	else if (PendingDirectionalControlIndex == 2) { CancelDirectionBP(2); }
+	else if (PendingDirectionalControlIndex == 3) { CancelDirectionBP(3); }
 }
 
 void AElectricPanel::OnInteract()
