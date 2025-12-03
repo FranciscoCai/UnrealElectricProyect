@@ -81,6 +81,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta=(ClampMin="0.0"))
 	float DirectionalHoldDuration = 0.3f;
 
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
+	void CancelInteractUp();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
+	void CancelInteractDown();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
+	void CancelInteractLeft();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
+	void CancelInteractRight();
+
+
 protected:
 	// Timer & pending state for directional hold-to-spawn
 	FTimerHandle DirectionalHoldTimerHandle;
