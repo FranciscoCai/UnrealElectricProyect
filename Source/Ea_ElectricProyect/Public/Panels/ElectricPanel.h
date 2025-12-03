@@ -81,7 +81,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta=(ClampMin="0.0"))
 	float DirectionalHoldDuration = 0.3f;
 
-
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
+	void StartDirectionBP(int startDirection);
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
 	void CancelDirectionBP(int cancelDirection);
 
