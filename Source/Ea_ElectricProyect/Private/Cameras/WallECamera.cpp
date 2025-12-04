@@ -34,7 +34,7 @@ void AWallECamera::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (!IsValid(TargetActor)) return;
-
+	if (bIsTransitioning) return;
 	FVector TargetLocation = TargetActor->GetActorLocation();
 	float YawRad = FMath::DegreesToRadians(OrbitYaw);
 	float PitchRad = FMath::DegreesToRadians(OrbitPitch);

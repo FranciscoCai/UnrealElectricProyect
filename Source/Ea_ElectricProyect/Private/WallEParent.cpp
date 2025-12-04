@@ -248,6 +248,11 @@ void AWallEParent::BeginInteractStation()
 			}
 		}, InteractStationHoldDuration, false);
 	}
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	{
+		// Intensity [0..1], duration matches hold duration, affect all motors (set booleans as desired)
+		PC->PlayDynamicForceFeedback(0.7f, InteractHoldDuration, true, true, true, true, EDynamicForceFeedbackAction::Start);
+	}
 }
 
 void AWallEParent::CancelInteractStation()
@@ -260,6 +265,10 @@ void AWallEParent::CancelInteractStation()
 	bIsHoldingInteractStation = false;
 	CurrentInteractStationHoldTime = 0.0f;
 	bHasTriggeredInteractStation = false;
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	{
+		PC->PlayDynamicForceFeedback(0.0f, 0.0f, true, true, true, true, EDynamicForceFeedbackAction::Stop);
+	}
 }
 
 void AWallEParent::OnInteractStation()
