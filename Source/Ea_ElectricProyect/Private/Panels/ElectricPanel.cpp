@@ -102,14 +102,14 @@ void AElectricPanel::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 			EnhancedInput->BindAction(EaPC->MoveUpAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputUp);
 			EnhancedInput->BindAction(EaPC->MoveUpAction, ETriggerEvent::Canceled, this, &AElectricPanel::OnInputUpReleased);
 
+			EnhancedInput->BindAction(EaPC->MoveLeftAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputLeft);
+			EnhancedInput->BindAction(EaPC->MoveLeftAction, ETriggerEvent::Canceled, this, &AElectricPanel::OnInputLeftReleased);
+
 			EnhancedInput->BindAction(EaPC->MoveDownAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputDown);
 			EnhancedInput->BindAction(EaPC->MoveDownAction, ETriggerEvent::Canceled, this, &AElectricPanel::OnInputDownReleased);
 
 			EnhancedInput->BindAction(EaPC->MoveRightAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputRight);
 			EnhancedInput->BindAction(EaPC->MoveRightAction, ETriggerEvent::Canceled, this, &AElectricPanel::OnInputRightReleased);
-
-			EnhancedInput->BindAction(EaPC->MoveLeftAction, ETriggerEvent::Started, this, &AElectricPanel::OnInputLeft);
-			EnhancedInput->BindAction(EaPC->MoveLeftAction, ETriggerEvent::Canceled, this, &AElectricPanel::OnInputLeftReleased);
 		}
 
 		// Bind de Interact: Started -> BeginInteract, Canceled -> CancelInteract

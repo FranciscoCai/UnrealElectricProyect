@@ -27,10 +27,10 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:	
 	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
 	AElectricPanelStation* ElectricPanelStationOn; // 使用前向声明指针
@@ -61,11 +61,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputUp();
 	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnInputLeft();
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputDown();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnInputRight();
-	UFUNCTION(BlueprintCallable, Category = "Input")
-	void OnInputLeft();
 
 	// Release handlers for directional inputs (cancel the directional hold)
 	UFUNCTION(BlueprintCallable, Category = "Input")
@@ -108,7 +108,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void CancelInteract();
 
-protected:
 	// Estado de hold (no editable por dise馻dor en runtime salvo Visualizaci髇)
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Input")
 	bool bIsHoldingInteract = false;
@@ -133,7 +132,6 @@ protected:
 	// Cancela hold direccional
 	void CancelDirectionalHold();
 
-protected:
 	// Pending spawn data when a directional input started hold
 	int32 PendingControlIndex = -1;
 	bool bPendingSpawnAtStart = false;
