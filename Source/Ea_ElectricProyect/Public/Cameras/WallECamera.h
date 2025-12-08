@@ -42,6 +42,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
 	float OrbitDistance = 400.0f;
 
+	/** Altura inicial de la cámara respecto al objetivo */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
+	float CameraHeightOffset = 200.0f;
+
 	/** Llama esto desde el input para rotar la cámara */
 	void AddOrbitInput(FVector2D Input);
 
