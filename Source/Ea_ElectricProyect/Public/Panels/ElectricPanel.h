@@ -116,6 +116,7 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Input")
 	float CurrentInteractHoldTime = 0.0f;
 
+
 	// Evita ejecutar OnInteract varias veces por un mismo hold
 	bool bHasTriggeredInteract = false;
 

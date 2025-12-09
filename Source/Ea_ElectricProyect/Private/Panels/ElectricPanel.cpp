@@ -125,6 +125,8 @@ void AElectricPanel::OnInputUp()
     if (!ElectricPanelStationOn) return;
 	CancelDirectionalHold();
     PendingDirectionalControlIndex = 0;
+
+
     bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnUp;
     bPendingDirectionalReverseInput = false;
     bHasPendingDirectionalSpawn = true;
@@ -141,7 +143,16 @@ void AElectricPanel::OnInputLeft()
     if (!LimitLeft) return;
     if (!ElectricPanelStationOn) return;
 	CancelDirectionalHold();
-    PendingDirectionalControlIndex = 1;
+	if (ElectricPanelStationOn->isCelling)
+	{
+		PendingDirectionalControlIndex = 3;
+	}
+	else
+	{
+		PendingDirectionalControlIndex = 1;
+	}
+
+
     bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnLeft;
     bPendingDirectionalReverseInput = true;
     bHasPendingDirectionalSpawn = true;
@@ -159,6 +170,8 @@ void AElectricPanel::OnInputDown()
     if (!ElectricPanelStationOn) return;
 	CancelDirectionalHold();
     PendingDirectionalControlIndex = 2;
+
+
     bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnDown;
     bPendingDirectionalReverseInput = true;
     bHasPendingDirectionalSpawn = true;
@@ -175,7 +188,16 @@ void AElectricPanel::OnInputRight()
     if (!LimitRight) return;
     if (!ElectricPanelStationOn) return;
 	CancelDirectionalHold();
-    PendingDirectionalControlIndex = 3;
+	if (ElectricPanelStationOn->isCelling)
+	{
+		PendingDirectionalControlIndex = 1;
+	}
+	else
+	{
+		PendingDirectionalControlIndex = 3;
+	}
+
+
     bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnRight;
     bPendingDirectionalReverseInput = false;
     bHasPendingDirectionalSpawn = true;
@@ -234,6 +256,14 @@ void AElectricPanel::OnDirectionalHoldFinished()
 	if (!bHasPendingDirectionalSpawn || PendingDirectionalControlIndex < 0) return;
 
 	int32 ControlIndex = PendingDirectionalControlIndex;
+	if (ElectricPanelStationOn->isCelling && PendingDirectionalControlIndex ==1)
+	{
+		ControlIndex = 3;
+	}
+	else if (ElectricPanelStationOn->isCelling && PendingDirectionalControlIndex == 3)
+	{
+		ControlIndex = 1;
+	}
 	bool bSpawnAtStart = bPendingDirectionalSpawnAtStart;
 	bool bReverseInput = bPendingDirectionalReverseInput;
 
@@ -251,6 +281,8 @@ void AElectricPanel::CancelDirectionalHold()
 	{
 		GetWorldTimerManager().ClearTimer(DirectionalHoldTimerHandle);
 	}
+
+
 	if (PendingDirectionalControlIndex == 0) { CancelDirectionBP(0); }
 	else if (PendingDirectionalControlIndex == 1) { CancelDirectionBP(1); }
 	else if (PendingDirectionalControlIndex == 2) { CancelDirectionBP(2); }

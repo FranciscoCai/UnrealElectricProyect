@@ -38,6 +38,8 @@ public:
 	bool bSpawnDown = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
 	bool bSpawnRight = true;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Direction")
+	bool isCelling = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Electric")
 	TArray<AElectricSpline*> Splines;
