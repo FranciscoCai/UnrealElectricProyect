@@ -212,7 +212,7 @@ void AElectricPanel::OnInputRight()
 void AElectricPanel::OnInputUpReleased()
 {
     // Only cancel if the released key is the one currently pending
-    if (bHasPendingDirectionalSpawn && PendingDirectionalControlIndex == 0)
+    if (bHasPendingDirectionalSpawn)
     {
 		CancelDirectionalHold();
 		bHasPendingDirectionalSpawn = false;
@@ -222,7 +222,7 @@ void AElectricPanel::OnInputUpReleased()
 
 void AElectricPanel::OnInputLeftReleased()
 {
-    if (bHasPendingDirectionalSpawn && PendingDirectionalControlIndex == 1)
+    if (bHasPendingDirectionalSpawn)
     {
 		CancelDirectionalHold();
 		bHasPendingDirectionalSpawn = false;
@@ -232,7 +232,7 @@ void AElectricPanel::OnInputLeftReleased()
 
 void AElectricPanel::OnInputDownReleased()
 {
-    if (bHasPendingDirectionalSpawn && PendingDirectionalControlIndex == 2)
+    if (bHasPendingDirectionalSpawn)
     {
 		CancelDirectionalHold();
 		bHasPendingDirectionalSpawn = false;
@@ -242,7 +242,7 @@ void AElectricPanel::OnInputDownReleased()
 
 void AElectricPanel::OnInputRightReleased()
 {
-    if (bHasPendingDirectionalSpawn && PendingDirectionalControlIndex == 3)
+    if (bHasPendingDirectionalSpawn)
     {
 		CancelDirectionalHold();
 		bHasPendingDirectionalSpawn = false;
