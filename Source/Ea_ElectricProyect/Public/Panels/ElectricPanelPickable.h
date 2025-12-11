@@ -14,8 +14,8 @@ class EA_ELECTRICPROYECT_API AElectricPanelPickable : public AElectricPanel
 {
 	GENERATED_BODY()
     public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pick")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pick")
 	bool CanPick = true;
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Pick")
-	void OnSnapPanelEvent();
+	void BP_OnSnapPanelEvent();
 };
