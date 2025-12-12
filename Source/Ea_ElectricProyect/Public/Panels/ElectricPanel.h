@@ -87,6 +87,15 @@ public:
 	void CancelDirectionBP(int cancelDirection);
 
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
+	void BeginInteractBP();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
+	void CancelInteractBP();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
+	void FinishInteractBP();
+
+
+
 
 protected:
 	// Timer & pending state for directional hold-to-spawn

@@ -296,6 +296,7 @@ void AElectricPanel::OnInteract()
 
 void AElectricPanel::BeginInteract()
 {
+	BeginInteractBP();
 	// Si la duración es 0, ejecutar inmediatamente
 	if (InteractHoldDuration <= 0.0f)
 	{
@@ -325,6 +326,7 @@ void AElectricPanel::BeginInteract()
 
 void AElectricPanel::CancelInteract()
 {
+	CancelInteractBP();
 	// Limpiar timer y resetear estado
 	if (GetWorld())
 	{
@@ -343,6 +345,7 @@ void AElectricPanel::CancelInteract()
 
 void AElectricPanel::OnInteractTimerFinished()
 {
+	FinishInteractBP();
 	// Evitar dobles ejecuciones
 	if (bHasTriggeredInteract) return;
 
