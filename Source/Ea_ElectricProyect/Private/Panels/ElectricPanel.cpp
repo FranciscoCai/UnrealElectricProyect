@@ -124,11 +124,25 @@ void AElectricPanel::OnInputUp()
     if (!LimitUp) return;
     if (!ElectricPanelStationOn) return;
 	CancelDirectionalHold();
-    PendingDirectionalControlIndex = 0;
+	if (ElectricPanelStationOn->isCelling)
+	{
+		PendingDirectionalControlIndex = 2;
+	}
+	else
+	{
+		PendingDirectionalControlIndex = 0;
+	}
+	if (ElectricPanelStationOn->isCelling)
+	{
+		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnDown;
+		bPendingDirectionalReverseInput = true;
+	}
+	else
+	{
+		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnUp;
+		bPendingDirectionalReverseInput = false;
+	}
 
-
-    bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnUp;
-    bPendingDirectionalReverseInput = false;
     bHasPendingDirectionalSpawn = true;
 
     if (GetWorld())
@@ -169,11 +183,26 @@ void AElectricPanel::OnInputDown()
     if (!LimitDown) return;
     if (!ElectricPanelStationOn) return;
 	CancelDirectionalHold();
-    PendingDirectionalControlIndex = 2;
+	if (ElectricPanelStationOn->isCelling)
+	{
+		PendingDirectionalControlIndex = 0;
+	}
+	else
+	{
+		PendingDirectionalControlIndex = 2;
+	}
 
+	if (ElectricPanelStationOn->isCelling)
+	{
+		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnUp;
+		bPendingDirectionalReverseInput = false;
+	}
+	else
+	{
+		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnDown;
+		bPendingDirectionalReverseInput = true;
+	}
 
-    bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnDown;
-    bPendingDirectionalReverseInput = true;
     bHasPendingDirectionalSpawn = true;
 
     if (GetWorld())
