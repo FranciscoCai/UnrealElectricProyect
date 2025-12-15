@@ -124,24 +124,11 @@ void AElectricPanel::OnInputUp()
     if (!LimitUp) return;
     if (!ElectricPanelStationOn) return;
 	CancelDirectionalHold();
-	if (ElectricPanelStationOn->isCelling)
-	{
-		PendingDirectionalControlIndex = 2;
-	}
-	else
-	{
+
 		PendingDirectionalControlIndex = 0;
-	}
-	if (ElectricPanelStationOn->isCelling)
-	{
-		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnDown;
-		bPendingDirectionalReverseInput = true;
-	}
-	else
-	{
 		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnUp;
 		bPendingDirectionalReverseInput = false;
-	}
+	
 
     bHasPendingDirectionalSpawn = true;
 
@@ -183,25 +170,10 @@ void AElectricPanel::OnInputDown()
     if (!LimitDown) return;
     if (!ElectricPanelStationOn) return;
 	CancelDirectionalHold();
-	if (ElectricPanelStationOn->isCelling)
-	{
-		PendingDirectionalControlIndex = 0;
-	}
-	else
-	{
-		PendingDirectionalControlIndex = 2;
-	}
 
-	if (ElectricPanelStationOn->isCelling)
-	{
-		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnUp;
-		bPendingDirectionalReverseInput = false;
-	}
-	else
-	{
+		PendingDirectionalControlIndex = 2;
 		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnDown;
 		bPendingDirectionalReverseInput = true;
-	}
 
     bHasPendingDirectionalSpawn = true;
 
