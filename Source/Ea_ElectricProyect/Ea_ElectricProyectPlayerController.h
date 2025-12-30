@@ -73,4 +73,6 @@ public:
 	UInputAction* MoveRightAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MoveLeftAction;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	bool changeDirection = false;
 };

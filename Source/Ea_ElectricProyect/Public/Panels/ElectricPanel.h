@@ -94,7 +94,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
 	void FinishInteractBP();
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	bool CanInteract = false;
 
 
 protected:

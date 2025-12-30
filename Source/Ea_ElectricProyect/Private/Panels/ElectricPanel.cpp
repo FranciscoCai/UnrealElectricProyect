@@ -123,18 +123,26 @@ void AElectricPanel::OnInputUp()
 {
     if (!LimitUp) return;
     if (!ElectricPanelStationOn) return;
-	CancelDirectionalHold();
-
+    CancelDirectionalHold();
+	AEa_ElectricProyectPlayerController* EaPC = Cast<AEa_ElectricProyectPlayerController>(GetController());
+	if ((EaPC && !EaPC->changeDirection)||(!ElectricPanelStationOn->isCelling))
+	{
 		PendingDirectionalControlIndex = 0;
 		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnUp;
 		bPendingDirectionalReverseInput = false;
-	
+	}
+	else
+	{
+		PendingDirectionalControlIndex = 2;
+		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnDown;
+		bPendingDirectionalReverseInput = true;
+	}
 
     bHasPendingDirectionalSpawn = true;
 
     if (GetWorld())
     {
-		StartDirectionBP(PendingDirectionalControlIndex);
+        StartDirectionBP(PendingDirectionalControlIndex);
         GetWorldTimerManager().SetTimer(DirectionalHoldTimerHandle, this, &AElectricPanel::OnDirectionalHoldFinished, DirectionalHoldDuration, false);
     }
 }
@@ -170,10 +178,19 @@ void AElectricPanel::OnInputDown()
     if (!LimitDown) return;
     if (!ElectricPanelStationOn) return;
 	CancelDirectionalHold();
-
+	AEa_ElectricProyectPlayerController* EaPC = Cast<AEa_ElectricProyectPlayerController>(GetController());
+	if ((EaPC && !EaPC->changeDirection)||(!ElectricPanelStationOn->isCelling))
+	{
 		PendingDirectionalControlIndex = 2;
 		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnDown;
 		bPendingDirectionalReverseInput = true;
+	}
+	else
+	{
+		PendingDirectionalControlIndex = 0;
+		bPendingDirectionalSpawnAtStart = ElectricPanelStationOn->bSpawnUp;
+		bPendingDirectionalReverseInput = false;
+	}
 
     bHasPendingDirectionalSpawn = true;
 
@@ -297,6 +314,10 @@ void AElectricPanel::OnInteract()
 
 void AElectricPanel::BeginInteract()
 {
+	if(!CanInteract)
+	{
+		return;
+	}
 	BeginInteractBP();
 	// Si la duración es 0, ejecutar inmediatamente
 	if (InteractHoldDuration <= 0.0f)
