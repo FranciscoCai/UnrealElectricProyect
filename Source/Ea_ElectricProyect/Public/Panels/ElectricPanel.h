@@ -95,7 +95,7 @@ public:
 	void FinishInteractBP();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	bool CanInteract = false;
+	bool CanInteract = true;
 
 
 protected:

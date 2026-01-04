@@ -32,10 +32,10 @@ void AElectricPanel::BeginPlay()
 	Super::BeginPlay();
 
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	if (PC && PC->GetPawn() != this && poseOnStart)
-	{
-		PC->Possess(this);
-	}
+	//if (PC && PC->GetPawn() != this && poseOnStart)
+	//{
+	//	PC->Possess(this);
+	//}
 }
 
 void AElectricPanel::PossessedBy(AController* NewController)
