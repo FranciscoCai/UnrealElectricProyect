@@ -24,7 +24,6 @@ AWallEParent::AWallEParent()
 	PrimaryActorTick.bCanEverTick = true;
 
 	HeldPanel = nullptr;
-	PickBoxComp = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -350,8 +349,12 @@ void AWallEParent::OnPickUpStarted()
 	}
 
 	// Attach to mesh socket (or fallback) then fix scale/rotation
-	FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, true);
-	Panel->AttachToComponent(PickBoxComp, AttachRules);
+	FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
+	USkeletalMeshComponent* CharMesh = GetMesh();
+	Panel->AttachToComponent(CharMesh, AttachRules, TEXT("BigPanelSocket"));
+	bPickTransition = true;
+	bPick = true;
+	HeldPanel = Panel;
 	//const FName SocketName = TEXT("BigPanelSocket");
 	//bool bAttached = false;
 

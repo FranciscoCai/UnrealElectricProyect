@@ -121,12 +121,12 @@ private:
 	// Reference to the currently held electric panel (if any)
 	AElectricPanel* HeldPanel = nullptr;
 
-	// Cached pointer to the PickBox component (found by name or tag at BeginPlay)
-	UPrimitiveComponent* PickBoxComp = nullptr;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	float MovementSpeed = 0.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	UPrimitiveComponent* PickBoxComp = nullptr;
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnMoveReleased(const FInputActionValue& Value);
@@ -134,7 +134,7 @@ public:
 	float InteractHoldDuration = 1.5f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State")
-	bool bPick = false;
+	bool bPick = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 	bool bPickTransition = false;
 

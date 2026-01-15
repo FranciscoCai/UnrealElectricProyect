@@ -62,6 +62,8 @@ void AWallECamera::Tick(float DeltaTime)
 		Params.AddIgnoredActor(TargetActor);
 	}
 
+
+
 	bool bHit = GetWorld()->LineTraceSingleByChannel(
 		HitResult,
 		TargetLocation,
