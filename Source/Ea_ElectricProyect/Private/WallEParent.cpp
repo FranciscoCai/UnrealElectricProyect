@@ -15,6 +15,7 @@
 #include "Components/BoxComponent.h"
 #include "Panels/ElectricPanelStation.h"
 #include "TimerManager.h"
+#include "Cameras/WallECamera.h"
 #include "Ea_ElectricProyectPlayerController.h"
 // Sets default values
 AWallEParent::AWallEParent()
@@ -44,16 +45,6 @@ void AWallEParent::BeginPlay()
 			PickBoxComp = Cast<UPrimitiveComponent>(Comp);
 			break;
 		}
-	}
-
-	// UE_LOG to confirm presence/absence of PickBox
-	if (PickBoxComp)
-	{
-		UE_LOG(LogTemp, Log, TEXT("AWallEParent: PickBox found -> Name: %s, Class: %s"), *PickBoxComp->GetName(), *PickBoxComp->GetClass()->GetName());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("daaadaa"), *GetName());
 	}
 }
 
@@ -290,6 +281,10 @@ void AWallEParent::OnInteractStation()
 
 void AWallEParent::OnPickUpOrDownStarted()
 {
+	if(bPickTransition)
+	{
+		return;
+	}
 	if (HeldPanel)
 	{
 		// Si ya est¨¢ sosteniendo un panel, suelta
@@ -354,13 +349,49 @@ void AWallEParent::OnPickUpStarted()
 		Panel->ElectricPanelStationOn = nullptr;
 	}
 
-	// Attach the panel to the PickBox component so it follows its position continually
+	// Attach to mesh socket (or fallback) then fix scale/rotation
 	FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, true);
 	Panel->AttachToComponent(PickBoxComp, AttachRules);
+	//const FName SocketName = TEXT("BigPanelSocket");
+	//bool bAttached = false;
 
-	// Optionally, disable physics or movement on the panel here if needed (not done by default)
+	//USkeletalMeshComponent* CharMesh = GetMesh();
+	//if (CharMesh && CharMesh->DoesSocketExist(SocketName))
+	//{
+	//	Panel->AttachToComponent(CharMesh, AttachRules, SocketName);
+	//	bAttached = true;
+	//}
+	//else
+	//{
+ //       if (PickBoxComp)
+	//	{
+	//		Panel->AttachToComponent(PickBoxComp, AttachRules);
+	//		bAttached = true;
+	//	}
+	//}
 
-	HeldPanel = Panel;
+	//// Diagnostics: log transforms and scales
+	//if (bAttached)
+	//{
+	//	USceneComponent* PanelRoot = Panel->GetRootComponent();
+	//	if (PanelRoot)
+	//	{
+
+	//		// Fix scale to 1 (choose SetWorldScale3D or SetRelativeScale3D depending on desired result)
+	//		PanelRoot->SetRelativeScale3D(FVector::OneVector);
+
+	//		// Fix rotation if socket orientation is incorrect - set relative rotation to desired local orientation
+	//		// Adjust values as needed (example resets rotation)
+	//		PanelRoot->SetRelativeRotation(FRotator::ZeroRotator);
+
+	//		// Optionally set a small local offset so the panel sits correctly in the hand
+	//		// PanelRoot->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+	//	}
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("AWallEParent::OnPickUpStarted - failed to attach panel (no valid target)"));
+	//}
 }
 
 void AWallEParent::OnPickDownStarted()
@@ -368,7 +399,8 @@ void AWallEParent::OnPickDownStarted()
 	if (!HeldPanel) return;
 
 	HeldPanel->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-
+	bPickTransition = true;
+	bPick = false;
 	// Ensure PickBoxComp exists (try to find again if needed)
 	if (!PickBoxComp)
 	{
@@ -418,7 +450,6 @@ void AWallEParent::OnPickDownStarted()
 		}
 
 	}
-
 	HeldPanel = nullptr;
 }
 

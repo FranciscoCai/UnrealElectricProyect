@@ -133,6 +133,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta = (ClampMin = "0.0"))
 	float InteractHoldDuration = 1.5f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State")
+	bool bPick = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	bool bPickTransition = false;
+
 protected:
     /** Called por Enhanced Input cuando se recibe WallELook (Vector2D) */
     UFUNCTION()

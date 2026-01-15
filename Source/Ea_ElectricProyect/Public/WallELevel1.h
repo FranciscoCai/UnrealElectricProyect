@@ -17,6 +17,11 @@ class EA_ELECTRICPROYECT_API AWallELevel1 : public AWallEParent
 public:
 	virtual void OnPressE() override;
 	virtual void OnPressQ() override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State")
+	bool bDown = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	bool bTransition = false;
+
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "RobotStation")
 	void WallEUp();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "RobotStation")
