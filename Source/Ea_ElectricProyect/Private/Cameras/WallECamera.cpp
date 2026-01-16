@@ -25,10 +25,11 @@ void AWallECamera::BeginPlay()
 
 // Define los l¨ªmites de pitch (puedes cambiarlos)
 const float MinPitch = -45.0f;
-const float MaxPitch = 0.0f;
+const float MaxPitch = 5.0f;
 
 void AWallECamera::AddOrbitInput(FVector2D Input)
 {
+	if (activeCamera == false) return;
 	OrbitYaw += Input.X * 2.0f; // Orbita horizontal (mueve la c¨¢mara alrededor del objetivo)
 	OrbitPitch = FMath::Clamp(OrbitPitch - Input.Y * 0.5f, MinPitch, MaxPitch); // Solo afecta la rotaci¨®n local
 }
@@ -39,6 +40,7 @@ void AWallECamera::Tick(float DeltaTime)
 
 	if (!IsValid(TargetActor)) return;
 	if (bIsTransitioning) return;
+	
 	FVector TargetLocation = TargetActor->GetActorLocation();
 
 	// Orbita horizontalmente (eje Yaw)

@@ -36,7 +36,7 @@ public:
 
 	/** Ángulo pitch de la órbita */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
-	float OrbitPitch = 10.0f;
+	float OrbitPitch = 0.0f;
 
 	/** Distancia de la cámara al objetivo */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
