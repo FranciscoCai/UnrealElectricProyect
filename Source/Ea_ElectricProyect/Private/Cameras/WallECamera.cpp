@@ -70,7 +70,7 @@ void AWallECamera::Tick(float DeltaTime)
 		HitResult,
 		TargetLocation,
 		DesiredCameraLocation,
-		ECC_Visibility,
+		ECC_GameTraceChannel2, // <-- Cambia a ECC_GameTraceChannelX que corresponda a tu WalleCameraBlock
 		Params
 	);
 
