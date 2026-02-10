@@ -318,7 +318,7 @@ void AWallEParent::OnPickUpStarted()
 	if (!PickBoxComp) return;
 	// Get overlapping actors of the pickbox and find an ElectricPanel
 	TArray<AActor*> OverlapActors;
-	PickBoxComp->GetOverlappingActors(OverlapActors, AElectricPanelPickable::StaticClass());
+	PickBoxComp->GetOverlappingActors(OverlapActors, AElectricPanel::StaticClass());
 	if (OverlapActors.Num() == 0) return;
 
 	AElectricPanel* Panel = nullptr;
@@ -336,7 +336,6 @@ void AWallEParent::OnPickUpStarted()
 	{
 		Panel->RobotInteractToPanel();
 	}
-
 	AElectricPanelPickable* pickablePanel = nullptr;
 	for (AActor* Actor : OverlapActors)
 	{
