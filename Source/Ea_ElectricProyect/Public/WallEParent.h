@@ -112,6 +112,7 @@ public:
 	void OnPickDownStarted();
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnPickUpOrDownStarted();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")
 	AMainCamera* CameraToChange;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RobotStation")

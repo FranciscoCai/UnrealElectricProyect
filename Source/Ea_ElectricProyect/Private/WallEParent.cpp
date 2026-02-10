@@ -321,7 +321,23 @@ void AWallEParent::OnPickUpStarted()
 	PickBoxComp->GetOverlappingActors(OverlapActors, AElectricPanelPickable::StaticClass());
 	if (OverlapActors.Num() == 0) return;
 
-	AElectricPanelPickable* Panel = nullptr;
+	AElectricPanel* Panel = nullptr;
+	for (AActor* Actor : OverlapActors)
+	{
+		if (!Actor) continue;
+		if (AElectricPanel* P = Cast<AElectricPanel>(Actor))
+		{
+			Panel = P;
+			break;
+		}
+	}
+
+	if (Panel)
+	{
+		Panel->RobotInteractToPanel();
+	}
+
+	AElectricPanelPickable* pickablePanel = nullptr;
 	for (AActor* Actor : OverlapActors)
 	{
 		if (!Actor) continue;
@@ -329,32 +345,34 @@ void AWallEParent::OnPickUpStarted()
 		{
 			if (P->CanPick)
 			{
-				Panel = P;
+				pickablePanel = P;
 				break;
 			}
 		}
 	}
 
-	if (!Panel) return;
-	// If the panel was placed on a station, clear the station's reference to it
-	if (Panel->ElectricPanelStationOn)
+	if (pickablePanel)
 	{
-		AElectricPanelStation* PanelStationOn = Panel->ElectricPanelStationOn;
-		// Clear station's stored panel pointer so station no longer references this panel
-		PanelStationOn->ElectricPanelClass = nullptr;
-		// Update splines so station state is consistent
-		PanelStationOn->UpdateSplinesPanelStation();
-		// Clear panel's back-reference
-		Panel->ElectricPanelStationOn = nullptr;
-	}
+		// If the panel was placed on a station, clear the station's reference to it
+		if (pickablePanel->ElectricPanelStationOn)
+		{
+			AElectricPanelStation* PanelStationOn = pickablePanel->ElectricPanelStationOn;
+			// Clear station's stored panel pointer so station no longer references this panel
+			PanelStationOn->ElectricPanelClass = nullptr;
+			// Update splines so station state is consistent
+			PanelStationOn->UpdateSplinesPanelStation();
+			// Clear panel's back-reference
+			pickablePanel->ElectricPanelStationOn = nullptr;
+		}
 
-	// Attach to mesh socket (or fallback) then fix scale/rotation
-	FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
-	USkeletalMeshComponent* CharMesh = GetMesh();
-	Panel->AttachToComponent(CharMesh, AttachRules, TEXT("BigPanelSocket"));
-	bPickTransition = true;
-	bPick = true;
-	HeldPanel = Panel;
+		// Attach to mesh socket (or fallback) then fix scale/rotation
+		FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
+		USkeletalMeshComponent* CharMesh = GetMesh();
+		pickablePanel->AttachToComponent(CharMesh, AttachRules, TEXT("BigPanelSocket"));
+		bPickTransition = true;
+		bPick = true;
+		HeldPanel = pickablePanel;
+	}
 	//const FName SocketName = TEXT("BigPanelSocket");
 	//bool bAttached = false;
 

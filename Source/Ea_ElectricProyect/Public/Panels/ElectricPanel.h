@@ -93,6 +93,8 @@ public:
 	void CancelInteractBP();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
 	void FinishInteractBP();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Input")
+	void RobotInteractToPanel();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	bool CanInteract = true;
