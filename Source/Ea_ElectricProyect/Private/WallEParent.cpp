@@ -210,38 +210,35 @@ void AWallEParent::DoMove(float Right, float Forward)
 
 void AWallEParent::BeginInteractStation()
 {
-	// If duration is zero or we're already holding and triggered, call immediately
-	if (InteractStationHoldDuration <= 0.0f)
-	{
-		OnInteractStation();
-		return;
-	}
-
+	
 	if (GetWorld())
 	{
-		// Setup hold state and timer
-		bIsHoldingInteractStation = true;
-		bHasTriggeredInteractStation = false;
-		CurrentInteractStationHoldTime = 0.0f;
-
-		GetWorldTimerManager().ClearTimer(InteractStationTimerHandle);
-		GetWorldTimerManager().SetTimer(InteractStationTimerHandle, [this]()
+		if(RobotStationRef && RobotStationRef->CameraToBack)
 		{
-			// Timer lambda runs on timer thread but in UE it's safe to call onto UObject as long as world exists.
-			// We route to member function to keep logic consistent.
-			if (!bHasTriggeredInteractStation)
+			bIsHoldingInteractStation = true;
+			bHasTriggeredInteractStation = false;
+			CurrentInteractStationHoldTime = 0.0f;
+
+			GetWorldTimerManager().ClearTimer(InteractStationTimerHandle);
+			GetWorldTimerManager().SetTimer(InteractStationTimerHandle, [this]()
+				{
+					// Timer lambda runs on timer thread but in UE it's safe to call onto UObject as long as world exists.
+					// We route to member function to keep logic consistent.
+					if (!bHasTriggeredInteractStation)
+					{
+						bHasTriggeredInteractStation = true;
+						bIsHoldingInteractStation = false;
+						CurrentInteractStationHoldTime = InteractStationHoldDuration;
+						OnInteractStation();
+					}
+				}, InteractStationHoldDuration, false);
+
+			if (APlayerController* PC = Cast<APlayerController>(GetController()))
 			{
-				bHasTriggeredInteractStation = true;
-				bIsHoldingInteractStation = false;
-				CurrentInteractStationHoldTime = InteractStationHoldDuration;
-				OnInteractStation();
+				// Intensity [0..1], duration matches hold duration, affect all motors (set booleans as desired)
+				PC->PlayDynamicForceFeedback(0.7f, InteractHoldDuration, true, true, true, true, EDynamicForceFeedbackAction::Start);
 			}
-		}, InteractStationHoldDuration, false);
-	}
-	if (APlayerController* PC = Cast<APlayerController>(GetController()))
-	{
-		// Intensity [0..1], duration matches hold duration, affect all motors (set booleans as desired)
-		PC->PlayDynamicForceFeedback(0.7f, InteractHoldDuration, true, true, true, true, EDynamicForceFeedbackAction::Start);
+		}
 	}
 }
 
@@ -266,7 +263,7 @@ void AWallEParent::OnInteractStation()
 	// Default behavior when hold completes: possess the RobotStationRef (same logic as previous instant version)
 	if (RobotStationRef)
 	{
-		if (RobotStationRef && RobotStationRef->CameraToGo && RobotStationRef->CameraToGo->bIsTransitioning)
+		if (RobotStationRef->CameraToGo->bIsTransitioning)
 		{
 			return; 
 		}
