@@ -29,13 +29,18 @@ void AElectricPanel_PowerStrip::SetupPlayerInputComponent(UInputComponent* Playe
 		}
 	}
 }
+
 void AElectricPanel_PowerStrip::OnPowerStripInputUp()
 {
 	if (PowerStripChange.IsValidIndex(0))
 	{
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		AElectricPanel_PowerStrip* Target = PowerStripChange[0];
+		if (Target && !Target->hasPossessed)
 		{
-			PC->Possess(PowerStripChange[0]);
+			if (APlayerController* PC = Cast<APlayerController>(GetController()))
+			{
+				PC->Possess(Target);
+			}
 		}
 	}
 }
@@ -43,9 +48,13 @@ void AElectricPanel_PowerStrip::OnPowerStripInputLeft()
 {
 	if (PowerStripChange.IsValidIndex(1))
 	{
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		AElectricPanel_PowerStrip* Target = PowerStripChange[1];
+		if (Target && !Target->hasPossessed)
 		{
-			PC->Possess(PowerStripChange[1]);
+			if (APlayerController* PC = Cast<APlayerController>(GetController()))
+			{
+				PC->Possess(Target);
+			}
 		}
 	}
 }
@@ -53,9 +62,13 @@ void AElectricPanel_PowerStrip::OnPowerStripInputDown()
 {
 	if (PowerStripChange.IsValidIndex(2))
 	{
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+				AElectricPanel_PowerStrip* Target = PowerStripChange[2];
+		if (Target && !Target->hasPossessed)
 		{
-			PC->Possess(PowerStripChange[2]);
+			if (APlayerController* PC = Cast<APlayerController>(GetController()))
+			{
+				PC->Possess(Target);
+			}
 		}
 	}
 }
@@ -63,9 +76,13 @@ void AElectricPanel_PowerStrip::OnPowerStripInputRight()
 {
 	if (PowerStripChange.IsValidIndex(3))
 	{
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+		AElectricPanel_PowerStrip* Target = PowerStripChange[3];
+		if (Target && !Target->hasPossessed)
 		{
-			PC->Possess(PowerStripChange[3]);
+			if (APlayerController* PC = Cast<APlayerController>(GetController()))
+			{
+				PC->Possess(Target);
+			}
 		}
 	}
 }
