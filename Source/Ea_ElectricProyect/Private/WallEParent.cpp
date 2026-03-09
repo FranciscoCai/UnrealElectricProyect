@@ -452,21 +452,41 @@ void AWallEParent::OnPickDownStarted()
 		return;
 	}
 
-	AElectricPanelStation* Station = Cast<AElectricPanelStation>(OverlapActors[0]);
-
-	if (Station && HeldPanel && !IsValid(Station->ElectricPanelClass))
+	for(AActor* Actor : OverlapActors)
 	{
-		// Snap the held panel to the station's world transform (position + rotation)
-		HeldPanel->SetActorLocationAndRotation(Station->GetActorLocation(), Station->GetActorRotation());
-		Station -> SetelectricPanelInformation(HeldPanel);
-		Station->SetelectricStationPanelInformation(HeldPanel);
-		Station->UpdateSplinesPanelStation();
-		if (AElectricPanelPickable* HeldPanelPickable = Cast<AElectricPanelPickable>(HeldPanel))
+		if (!Actor) continue;
+		UE_LOG(LogTemp, Warning, TEXT("AWallEParent::OnPickDownStarted - overlapping station found: %s"), *Actor->GetName());
+		if (AElectricPanelStation* Station = Cast<AElectricPanelStation>(Actor))
 		{
-			HeldPanelPickable->BP_OnSnapPanelEvent();
+			if(IsValid(Station->ElectricPanelClass))
+			{
+				continue;
+			}
+			HeldPanel->SetActorLocationAndRotation(Station->GetActorLocation(), Station->GetActorRotation());
+			Station->SetelectricPanelInformation(HeldPanel);
+			Station->SetelectricStationPanelInformation(HeldPanel);
+			Station->UpdateSplinesPanelStation();
+			if (AElectricPanelPickable* HeldPanelPickable = Cast<AElectricPanelPickable>(HeldPanel))
+			{
+				HeldPanelPickable->BP_OnSnapPanelEvent();
+			}
+			break;
 		}
-
 	}
+	//AElectricPanelStation* Station = Cast<AElectricPanelStation>(OverlapActors[0]);
+
+	//if (Station && HeldPanel && !IsValid(Station->ElectricPanelClass))
+	//{
+	//	// Snap the held panel to the station's world transform (position + rotation)
+	//	HeldPanel->SetActorLocationAndRotation(Station->GetActorLocation(), Station->GetActorRotation());
+	//	Station -> SetelectricPanelInformation(HeldPanel);
+	//	Station->SetelectricStationPanelInformation(HeldPanel);
+	//	Station->UpdateSplinesPanelStation();
+	//	if (AElectricPanelPickable* HeldPanelPickable = Cast<AElectricPanelPickable>(HeldPanel))
+	//	{
+	//		HeldPanelPickable->BP_OnSnapPanelEvent();
+	//	}
+	//}
 	HeldPanel = nullptr;
 }
 
