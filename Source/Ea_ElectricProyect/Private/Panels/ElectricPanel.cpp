@@ -80,9 +80,9 @@ void AElectricPanel::PossessedBy(AController* NewController)
 void AElectricPanel::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{
-
 		PC->PlayDynamicForceFeedback(0.0f, 0.0f, true, true, true, true, EDynamicForceFeedbackAction::Stop);
 	}
 	// Nota: ahora el hold-to-interact NO depende de Tick.
@@ -519,5 +519,9 @@ void AElectricPanel::UnPossessed()
 			}
 		}
 	}
+}
+bool AElectricPanel::IsCompatiblePanel_Implementation(AElectricPanelStation* StationToAttach) const
+{
+	return true;
 }
 

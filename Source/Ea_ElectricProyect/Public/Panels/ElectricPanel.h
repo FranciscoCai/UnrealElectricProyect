@@ -99,7 +99,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	bool CanInteract = true;
 
-
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Panel")
+	bool IsCompatiblePanel(AElectricPanelStation* StationToAttach) const;
+	virtual bool IsCompatiblePanel_Implementation(AElectricPanelStation* StationPanelToAttach) const;
 protected:
 	// Timer & pending state for directional hold-to-spawn
 	FTimerHandle DirectionalHoldTimerHandle;
@@ -150,7 +152,7 @@ protected:
 	bool bPendingSpawnAtStart = false;
 	bool bPendingReverseInput = false;
 	bool bHasPendingSpawn = false;
-
 private:
 	bool poseElectricCharacter = false;
+
 };

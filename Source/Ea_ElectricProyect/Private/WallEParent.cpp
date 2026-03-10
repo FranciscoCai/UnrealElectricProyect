@@ -455,10 +455,14 @@ void AWallEParent::OnPickDownStarted()
 	for(AActor* Actor : OverlapActors)
 	{
 		if (!Actor) continue;
-		UE_LOG(LogTemp, Warning, TEXT("AWallEParent::OnPickDownStarted - overlapping station found: %s"), *Actor->GetName());
+
 		if (AElectricPanelStation* Station = Cast<AElectricPanelStation>(Actor))
 		{
 			if(IsValid(Station->ElectricPanelClass))
+			{
+				continue;
+			}
+			if (!HeldPanel->IsCompatiblePanel(Station))
 			{
 				continue;
 			}
