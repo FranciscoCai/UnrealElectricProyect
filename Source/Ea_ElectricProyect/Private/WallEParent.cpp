@@ -365,6 +365,7 @@ void AWallEParent::OnPickUpStarted()
 		FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
 		USkeletalMeshComponent* CharMesh = GetMesh();
 		pickablePanel->AttachToComponent(CharMesh, AttachRules, TEXT("BigPanelSocket"));
+		UE_LOG(LogTemp, Log, TEXT("AWallEParent::OnPickUpStarted - attached panel to mesh socket"));
 		bPickTransition = true;
 		bPick = true;
 		HeldPanel = pickablePanel;
@@ -415,9 +416,6 @@ void AWallEParent::OnPickDownStarted()
 {
 	if (!HeldPanel) return;
 
-	HeldPanel->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	bPickTransition = true;
-	bPick = false;
 	// Ensure PickBoxComp exists (try to find again if needed)
 	if (!PickBoxComp)
 	{
@@ -434,22 +432,16 @@ void AWallEParent::OnPickDownStarted()
 		}
 	}
 
-	// If there's no PickBox component, just drop the panel and exit safely
-	if (!PickBoxComp)
-	{
-		HeldPanel = nullptr;
-		return;
-	}
-
 	// Get overlapping station actors safely and check array size before access
 	TArray<AActor*> OverlapActors;
 	PickBoxComp->GetOverlappingActors(OverlapActors, AElectricPanelStation::StaticClass());
 
 	if (OverlapActors.Num() == 0)
 	{
-		// No station overlapped: leave the panel where it was detached
-		HeldPanel = nullptr;
 		return;
+	}
+	else
+	{
 	}
 
 	for(AActor* Actor : OverlapActors)
@@ -466,6 +458,10 @@ void AWallEParent::OnPickDownStarted()
 			{
 				continue;
 			}
+			HeldPanel->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			bPickTransition = true;
+			bPick = false;
+
 			HeldPanel->SetActorLocationAndRotation(Station->GetActorLocation(), Station->GetActorRotation());
 			Station->SetelectricPanelInformation(HeldPanel);
 			Station->SetelectricStationPanelInformation(HeldPanel);
@@ -474,6 +470,7 @@ void AWallEParent::OnPickDownStarted()
 			{
 				HeldPanelPickable->BP_OnSnapPanelEvent();
 			}
+			HeldPanel = nullptr;
 			break;
 		}
 	}
@@ -491,7 +488,6 @@ void AWallEParent::OnPickDownStarted()
 	//		HeldPanelPickable->BP_OnSnapPanelEvent();
 	//	}
 	//}
-	HeldPanel = nullptr;
 }
 
 void AWallEParent::OnPressE()

@@ -36,7 +36,7 @@ void AElectricCharacter::Tick(float DeltaTime)
 	if (MoveDirection != 0.f && SplineToFollow)
 	{
 		float Direction = MoveDirection;
-		// Si bReverseSplineDirection es true (positivo), invierte la direcci¨®n
+		// Si bReverseSplineDirection es true (positivo), invierte la dirección
 		if(bReverseSplineDirection)
 		{
 			Direction *= -1.f;
@@ -62,10 +62,19 @@ void AElectricCharacter::Tick(float DeltaTime)
 			MoveDirection = 0.f;
 			GetTargetpanel(0);
 		}
-
 		FVector NewLocation = SplineToFollow->GetLocationAtDistanceAlongSpline(CurrentDistanceOnSpline, ESplineCoordinateSpace::World);
-		FRotator NewRotation = SplineToFollow->GetRotationAtDistanceAlongSpline(CurrentDistanceOnSpline, ESplineCoordinateSpace::World);
-
+		FRotator NewRotation = FRotator::ZeroRotator; 
+		if (Direction >= 0)
+		{
+			NewRotation = SplineToFollow->GetRotationAtDistanceAlongSpline(CurrentDistanceOnSpline, ESplineCoordinateSpace::World);
+		}
+		else
+		{
+			// Get the spline rotation and add 180 degrees to yaw to face the opposite direction
+			NewRotation = SplineToFollow->GetRotationAtDistanceAlongSpline(CurrentDistanceOnSpline, ESplineCoordinateSpace::World);
+			NewRotation.Yaw += 180.0f;
+			NewRotation.Normalize();
+		}
 		SetActorLocationAndRotation(NewLocation, NewRotation);
 	}
 
@@ -105,7 +114,7 @@ void AElectricCharacter::OnInputGoUp()
 
 void AElectricCharacter::OnInputBackUp()
 {
-    MoveDirection = -1.f; // Mover hacia atr¨¢s
+    MoveDirection = -1.f; // Mover hacia atrás
 }
 //void AElectricCharacter::OnInputGoDown()
 //{
