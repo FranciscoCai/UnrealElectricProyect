@@ -142,70 +142,26 @@ void AWallEParent::UnPossessed()
 
 void AWallEParent::Move(const FInputActionValue& Value)
 {
-	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
+	float ForwardValue = MovementVector.Y;
+	float TurnValue = MovementVector.X;
 
-	// Calcula la magnitud de la velocidad de movimiento
-	MovementSpeed = MovementVector.Size();
+	MovementSpeed = FMath::Abs(ForwardValue);
 
-	// route the input
-	DoMove(MovementVector.X, MovementVector.Y);
+	if (!FMath::IsNearlyZero(ForwardValue))
+	{
+		AddMovementInput(GetActorForwardVector(), ForwardValue);
+	}
+	if (!FMath::IsNearlyZero(TurnValue))
+	{
+		// Usa TurnSpeed y DeltaTime para controlar la velocidad de giro
+		AddControllerYawInput(TurnValue * TurnSpeed * GetWorld()->GetDeltaSeconds());
+	}
 }
 
 void AWallEParent::DoMove(float Right, float Forward)
 {
-	if (GetController() != nullptr)
-	{
-		FRotator Rotation;
-
-		// Prefer camera rotation from the current view target if possible
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
-		{
-			if (AActor* ViewTarget = PC->GetViewTarget())
-			{
-				if (AMainCamera* CamActor = Cast<AMainCamera>(ViewTarget))
-				{
-					if (CamActor->FollowCamera)
-					{
-						Rotation = CamActor->FollowCamera->GetComponentRotation();
-					}
-					else
-					{
-						Rotation = PC->GetControlRotation();
-					}
-				}
-				else
-				{
-					Rotation = PC->GetControlRotation();
-				}
-			}
-			else
-			{
-				Rotation = PC->GetControlRotation();
-			}
-		}
-		else
-		{
-			Rotation = GetController()->GetControlRotation();
-		}
-
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		AddMovementInput(ForwardDirection, Forward);
-		AddMovementInput(RightDirection, Right);
-
-		// --- Solo el mesh visual apunta hacia la dirección de movimiento ---
-		FVector MoveDir = (ForwardDirection * Forward) + (RightDirection * Right);
-		if (!MoveDir.IsNearlyZero())
-		{
-			FRotator MeshTargetRotation = MoveDir.Rotation();
-			MeshTargetRotation.Pitch = 0.f;
-			MeshTargetRotation.Roll = 0.f;
-			GetMesh()->SetWorldRotation(MeshTargetRotation);
-		}
-	}
+	// ÒÑÆúÓÃ»òÁô¿Õ£¬·ÀÖ¹Á´½Ó´íÎó
 }
 
 void AWallEParent::BeginInteractStation()
@@ -370,46 +326,6 @@ void AWallEParent::OnPickUpStarted()
 		bPick = true;
 		HeldPanel = pickablePanel;
 	}
-	//const FName SocketName = TEXT("BigPanelSocket");
-	//bool bAttached = false;
-
-	//USkeletalMeshComponent* CharMesh = GetMesh();
-	//if (CharMesh && CharMesh->DoesSocketExist(SocketName))
-	//{
-	//	Panel->AttachToComponent(CharMesh, AttachRules, SocketName);
-	//	bAttached = true;
-	//}
-	//else
-	//{
- //       if (PickBoxComp)
-	//	{
-	//		Panel->AttachToComponent(PickBoxComp, AttachRules);
-	//		bAttached = true;
-	//	}
-	//}
-
-	//// Diagnostics: log transforms and scales
-	//if (bAttached)
-	//{
-	//	USceneComponent* PanelRoot = Panel->GetRootComponent();
-	//	if (PanelRoot)
-	//	{
-
-	//		// Fix scale to 1 (choose SetWorldScale3D or SetRelativeScale3D depending on desired result)
-	//		PanelRoot->SetRelativeScale3D(FVector::OneVector);
-
-	//		// Fix rotation if socket orientation is incorrect - set relative rotation to desired local orientation
-	//		// Adjust values as needed (example resets rotation)
-	//		PanelRoot->SetRelativeRotation(FRotator::ZeroRotator);
-
-	//		// Optionally set a small local offset so the panel sits correctly in the hand
-	//		// PanelRoot->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
-	//	}
-	//}
-	//else
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("AWallEParent::OnPickUpStarted - failed to attach panel (no valid target)"));
-	//}
 }
 
 void AWallEParent::OnPickDownStarted()

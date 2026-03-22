@@ -126,6 +126,8 @@ private:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	float MovementSpeed = 0.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float TurnSpeed = 120.0f; 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UPrimitiveComponent* PickBoxComp = nullptr;
 
