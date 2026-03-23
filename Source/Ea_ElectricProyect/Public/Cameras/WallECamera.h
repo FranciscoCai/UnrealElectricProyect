@@ -49,6 +49,21 @@ public:
 	/** Llama esto desde el input para rotar la cámara */
 	void AddOrbitInput(FVector2D Input);
 
+	/** Set orbit rotation (position on the orbit). Pitch will be clamped. 
+	    If bApplyPosition is true and TargetActor + FollowCamera are valid, camera will be moved to match the orbit. */
+	UFUNCTION(BlueprintCallable, Category = "Orbit")
+	void SetOrbitRotation(float NewYaw, float NewPitch, bool bApplyPosition = true);
+
+	/** Optional: initial orbit values to apply at BeginPlay */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
+	float InitialOrbitYaw = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
+	float InitialOrbitPitch = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Orbit")
+	bool bApplyInitialOrbitAtBeginPlay = false;
+
 protected:
 	// Diferencia de altura inicial entre cámara y robot
 	float InitialZOffset = 0.0f;
