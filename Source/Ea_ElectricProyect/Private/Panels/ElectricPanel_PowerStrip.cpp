@@ -32,6 +32,7 @@ void AElectricPanel_PowerStrip::SetupPlayerInputComponent(UInputComponent* Playe
 
 void AElectricPanel_PowerStrip::OnPowerStripInputUp()
 {
+	if(!canReceiveInput) return;
 	if (PowerStripChange.IsValidIndex(0))
 	{
 		AElectricPanel_PowerStrip* Target = PowerStripChange[0];
@@ -46,6 +47,7 @@ void AElectricPanel_PowerStrip::OnPowerStripInputUp()
 }
 void AElectricPanel_PowerStrip::OnPowerStripInputLeft()
 {
+	if (!canReceiveInput) return;
 	if (PowerStripChange.IsValidIndex(1))
 	{
 		AElectricPanel_PowerStrip* Target = PowerStripChange[1];
@@ -60,6 +62,7 @@ void AElectricPanel_PowerStrip::OnPowerStripInputLeft()
 }
 void AElectricPanel_PowerStrip::OnPowerStripInputDown()
 {
+	if (!canReceiveInput) return;
 	if (PowerStripChange.IsValidIndex(2))
 	{
 				AElectricPanel_PowerStrip* Target = PowerStripChange[2];
@@ -74,6 +77,7 @@ void AElectricPanel_PowerStrip::OnPowerStripInputDown()
 }
 void AElectricPanel_PowerStrip::OnPowerStripInputRight()
 {
+	if (!canReceiveInput) return;
 	if (PowerStripChange.IsValidIndex(3))
 	{
 		AElectricPanel_PowerStrip* Target = PowerStripChange[3];

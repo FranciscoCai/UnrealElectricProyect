@@ -31,4 +31,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	bool hasPossessed = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	bool canReceiveInput = true;
 };

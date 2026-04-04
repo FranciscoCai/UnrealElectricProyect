@@ -24,6 +24,13 @@ AWallEParent::AWallEParent()
 	PrimaryActorTick.bCanEverTick = true;
 
 	HeldPanel = nullptr;
+
+	// Desactiva la rotaci車n autom芍tica
+	bUseControllerRotationYaw = false;
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -51,6 +58,23 @@ void AWallEParent::BeginPlay()
 void AWallEParent::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (CameraToChange)
+	{
+		if (!CameraToChange->bIsTransitioning)
+		{
+
+			if (UCameraComponent* FollowCam = CameraToChange->FindComponentByClass<UCameraComponent>())
+			{
+				FRotator CameraRot = FollowCam->GetComponentRotation();
+				FRotator TargetRot(0.f, CameraRot.Yaw, 0.f);
+
+				// Interpolaci車n suave
+				CurrentInterpRotation = FMath::RInterpTo(CurrentInterpRotation, TargetRot, DeltaTime, 10.0f);
+				SetActorRotation(CurrentInterpRotation);
+			}
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -142,21 +166,28 @@ void AWallEParent::UnPossessed()
 
 void AWallEParent::Move(const FInputActionValue& Value)
 {
-	FVector2D MovementVector = Value.Get<FVector2D>();
-	float ForwardValue = MovementVector.Y;
-	float TurnValue = MovementVector.X;
+    FVector2D MovementVector = Value.Get<FVector2D>();
+    float ForwardValue = MovementVector.Y;
+    float RightValue = MovementVector.X;
 
-	MovementSpeed = FMath::Abs(ForwardValue);
+    // Actualiza la direcci車n de movimiento
+    MovementDirection = MovementVector;
 
-	if (!FMath::IsNearlyZero(ForwardValue))
-	{
-		AddMovementInput(GetActorForwardVector(), ForwardValue);
-	}
-	if (!FMath::IsNearlyZero(TurnValue))
-	{
-		// Usa TurnSpeed y DeltaTime para controlar la velocidad de giro
-		AddControllerYawInput(TurnValue * TurnSpeed * GetWorld()->GetDeltaSeconds());
-	}
+    MovementSpeed = FMath::Abs(ForwardValue) + FMath::Abs(RightValue);
+
+    FRotator YawRot = GetActorRotation();
+    FVector ForwardDir = FRotationMatrix(YawRot).GetUnitAxis(EAxis::X);
+    FVector RightDir = FRotationMatrix(YawRot).GetUnitAxis(EAxis::Y);
+
+    if (!FMath::IsNearlyZero(ForwardValue))
+    {
+        AddMovementInput(ForwardDir, ForwardValue);
+    }
+    if (!FMath::IsNearlyZero(RightValue))
+    {
+        AddMovementInput(RightDir, RightValue);
+    }
+    // NO cambies la rotaci車n aqu赤
 }
 
 void AWallEParent::DoMove(float Right, float Forward)

@@ -36,7 +36,7 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -56,10 +56,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* PickUp;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-    UInputAction* PressE;
+	UInputAction* PressE;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-    UInputAction* PressQ;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* PressQ;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* WallELook;
 
@@ -81,7 +81,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void CancelInteractStation();
 	// Duration required to hold to trigger OnInteractStation (seconds)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta=(ClampMin="0.0"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta = (ClampMin = "0.0"))
 	float InteractStationHoldDuration = 1.5f;
 
 	// Visible runtime state (for widgets/debug)
@@ -91,11 +91,11 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Input")
 	float CurrentInteractStationHoldTime = 0.0f;
 
-    UFUNCTION(BlueprintCallable, Category = "Input")
-    virtual void OnPressE();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	virtual void OnPressE();
 
-    UFUNCTION(BlueprintCallable, Category = "Input")
-    virtual void OnPressQ();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	virtual void OnPressQ();
 
 
 private:
@@ -126,8 +126,6 @@ private:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	float MovementSpeed = 0.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-	float TurnSpeed = 120.0f; 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UPrimitiveComponent* PickBoxComp = nullptr;
 
@@ -140,9 +138,14 @@ public:
 	bool bPick = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 	bool bPickTransition = false;
-
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	FVector2D MovementDirection;
 protected:
-    /** Called por Enhanced Input cuando se recibe WallELook (Vector2D) */
-    UFUNCTION()
-    void OnLookInput(const FInputActionValue& Value);
+	/** Called por Enhanced Input cuando se recibe WallELook (Vector2D) */
+	UFUNCTION()
+	void OnLookInput(const FInputActionValue& Value);
+
+private:
+	FRotator CurrentInterpRotation;
+
 };
