@@ -134,6 +134,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta = (ClampMin = "0.0"))
 	float InteractHoldDuration = 1.5f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
+	bool bFreeCam = false;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "State")
 	bool bPick = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
