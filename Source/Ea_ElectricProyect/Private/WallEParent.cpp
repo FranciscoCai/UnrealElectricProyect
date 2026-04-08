@@ -415,7 +415,8 @@ void AWallEParent::OnPickDownStarted()
 			Station->UpdateSplinesPanelStation();
 			if (AElectricPanelPickable* HeldPanelPickable = Cast<AElectricPanelPickable>(HeldPanel))
 			{
-				HeldPanelPickable->BP_OnSnapPanelEvent();
+				// Pass the station so Blueprints can react with station context
+				HeldPanelPickable->BP_OnSnapPanelEvent(Station);
 			}
 			HeldPanel = nullptr;
 			break;
