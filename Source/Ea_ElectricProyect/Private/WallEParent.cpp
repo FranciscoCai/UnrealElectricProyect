@@ -258,6 +258,7 @@ void AWallEParent::OnInteractStation()
 		{
 			PC->ChangeCameraStart(RobotStationRef->CameraToBack, RobotStationRef->BackDuration);
 			PC->Possess(RobotStationRef);
+			RobotStationRef->WallEParentRef = this;
 		}
 	}
 }
