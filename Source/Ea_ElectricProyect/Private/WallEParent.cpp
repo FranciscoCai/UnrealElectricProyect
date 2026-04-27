@@ -330,6 +330,7 @@ void AWallEParent::OnPickUpStarted()
 			if (P->CanPick)
 			{
 				pickablePanel = P;
+				P->BP_OnPickPanelEvent();
 				break;
 			}
 		}
@@ -353,7 +354,6 @@ void AWallEParent::OnPickUpStarted()
 		FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
 		USkeletalMeshComponent* CharMesh = GetMesh();
 		pickablePanel->AttachToComponent(CharMesh, AttachRules, TEXT("BigPanelSocket"));
-		UE_LOG(LogTemp, Log, TEXT("AWallEParent::OnPickUpStarted - attached panel to mesh socket"));
 		bPickTransition = true;
 		bPick = true;
 		HeldPanel = pickablePanel;

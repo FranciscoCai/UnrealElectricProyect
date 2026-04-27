@@ -21,4 +21,6 @@ class EA_ELECTRICPROYECT_API AElectricPanelPickable : public AElectricPanel
 	// Now passes the station that the panel was snapped to
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Pick")
 	void BP_OnSnapPanelEvent(AElectricPanelStation* Station);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Pick")
+	void BP_OnPickPanelEvent();
 };
