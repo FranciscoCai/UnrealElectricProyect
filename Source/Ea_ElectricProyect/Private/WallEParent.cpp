@@ -139,6 +139,7 @@ void AWallEParent::UnPossessed()
 {
 	// Cache controller before calling Super because Super::UnPossessed may change it
 	APlayerController* PC = Cast<APlayerController>(GetController());
+	bFreeCam = false;
 
 	Super::UnPossessed();
 
