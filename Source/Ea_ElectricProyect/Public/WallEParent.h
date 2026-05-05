@@ -143,6 +143,14 @@ public:
 	bool bPickTransition = false;
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	FVector2D MovementDirection;
+
+	// Pickup interpolation properties (moved to public so UPROPERTY is allowed)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pick")
+	float PickInterpDuration = 0.25f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pick")
+	float PickElapsedTime = 0.0f;
+
 protected:
 	/** Called por Enhanced Input cuando se recibe WallELook (Vector2D) */
 	UFUNCTION()
@@ -151,4 +159,16 @@ protected:
 private:
 	FRotator CurrentInterpRotation;
 
+	// Transforms used for interpolation (runtime, no UPROPERTY needed)
+	FTransform PickStartTransform;
+	FTransform PickTargetTransform;
+
+	// Timer handle for interpolation
+	FTimerHandle PickInterpTimerHandle;
+
+	// State flag used while interpolating the panel toward socket
+	bool bIsPickingInterp = false;
+
+	// Timer-driven interpolation callback (declared so SetTimer can bind to it)
+	void TickPickInterp();
 };

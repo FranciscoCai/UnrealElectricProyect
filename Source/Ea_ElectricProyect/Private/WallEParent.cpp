@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+// Add this include at the top of your file, after other includes
 #include "WallEParent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
@@ -352,12 +353,46 @@ void AWallEParent::OnPickUpStarted()
 		}
 
 		// Attach to mesh socket (or fallback) then fix scale/rotation
-		FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
 		USkeletalMeshComponent* CharMesh = GetMesh();
-		pickablePanel->AttachToComponent(CharMesh, AttachRules, TEXT("BigPanelSocket"));
-		bPickTransition = true;
-		bPick = true;
-		HeldPanel = pickablePanel;
+		if (CharMesh && CharMesh->DoesSocketExist(TEXT("BigPanelSocket")))
+		{
+			// Capture start and target transforms (world space)
+			PickStartTransform = pickablePanel->GetActorTransform();
+			PickTargetTransform = CharMesh->GetSocketTransform(TEXT("BigPanelSocket"), RTS_World);
+
+			// Disable physics and collision on root primitive if present so interpolation is stable
+			if (UPrimitiveComponent* RootPrim = Cast<UPrimitiveComponent>(pickablePanel->GetRootComponent()))
+			{
+				if (RootPrim->IsSimulatingPhysics())
+				{
+					RootPrim->SetSimulatePhysics(false);
+				}
+				RootPrim->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			}
+
+			// Start interpolation using a repeating timer (approx 60 FPS)
+			PickElapsedTime = 0.0f;
+			bIsPickingInterp = true;
+			bPickTransition = true;
+			bPick = true;
+			HeldPanel = pickablePanel;
+
+			const float TimerRate = 1.0f / 60.0f;
+			if (GetWorld())
+			{
+				GetWorldTimerManager().ClearTimer(PickInterpTimerHandle);
+				GetWorldTimerManager().SetTimer(PickInterpTimerHandle, this, &AWallEParent::TickPickInterp, TimerRate, true);
+			}
+		}
+		else
+		{
+			// Fallback: immediate attach if socket not found
+			FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
+			pickablePanel->AttachToComponent(CharMesh, AttachRules, TEXT("BigPanelSocket"));
+			bPickTransition = true;
+			bPick = true;
+			HeldPanel = pickablePanel;
+		}
 	}
 }
 
@@ -461,6 +496,60 @@ void AWallEParent::OnLookInput(const FInputActionValue& Value)
         {
             WallECam->AddOrbitInput(Value.Get<FVector2D>());
         }
+    }
+}
+
+void AWallEParent::TickPickInterp()
+{
+    if (!bIsPickingInterp || !HeldPanel || PickInterpDuration <= 0.0f)
+    {
+        // Safety: if something went wrong, clear timer and state
+        if (GetWorld())
+        {
+            GetWorldTimerManager().ClearTimer(PickInterpTimerHandle);
+        }
+        bIsPickingInterp = false;
+        return;
+    }
+
+    // Advance elapsed time and compute alpha
+    const float TimerRateApprox = 1.0f / 60.0f; // match SetTimer rate
+    PickElapsedTime += TimerRateApprox;
+    float Alpha = FMath::Clamp(PickElapsedTime / PickInterpDuration, 0.0f, 1.0f);
+
+    // Interpolate location and rotation
+    FVector NewLoc = FMath::Lerp(PickStartTransform.GetLocation(), PickTargetTransform.GetLocation(), Alpha);
+    FQuat StartQ = PickStartTransform.GetRotation();
+    FQuat TargetQ = PickTargetTransform.GetRotation();
+    FQuat NewQ = FQuat::Slerp(StartQ, TargetQ, Alpha);
+
+    HeldPanel->SetActorLocationAndRotation(NewLoc, NewQ.Rotator());
+
+    if (Alpha >= 1.0f)
+    {
+        // Done: attach to socket and restore final state
+        USkeletalMeshComponent* CharMesh = GetMesh();
+        if (CharMesh)
+        {
+            FAttachmentTransformRules AttachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
+            HeldPanel->AttachToComponent(CharMesh, AttachRules, TEXT("BigPanelSocket"));
+        }
+
+        // Optionally re-enable collision on the panel root (if you want)
+        if (UPrimitiveComponent* RootPrim = Cast<UPrimitiveComponent>(HeldPanel->GetRootComponent()))
+        {
+            RootPrim->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+            // Leave SimulatePhysics disabled since now attached
+        }
+
+        // Clear timer and interpolation state
+        if (GetWorld())
+        {
+            GetWorldTimerManager().ClearTimer(PickInterpTimerHandle);
+        }
+        bIsPickingInterp = false;
+        bPickTransition = false;
+        PickElapsedTime = 0.0f;
     }
 }
 
