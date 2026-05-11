@@ -67,7 +67,7 @@ void AElectricPanel::PossessedBy(AController* NewController)
 						}
 						if (EaPC->PanelMappingContext)
 						{
-							LocalSubsystem->AddMappingContext(EaPC->PanelMappingContext, 1);
+							LocalSubsystem->AddMappingContext(EaPC->PanelMappingContext, 0);
 						}
 					}
 				}
