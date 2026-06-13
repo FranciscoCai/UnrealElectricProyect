@@ -119,11 +119,10 @@ public:
 	float TransitionDuration;
 
 private:
-	// Reference to the currently held electric panel (if any)
-	AElectricPanel* HeldPanel = nullptr;
-
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Panel")
+	AElectricPanel* HeldPanel = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
 	float MovementSpeed = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
