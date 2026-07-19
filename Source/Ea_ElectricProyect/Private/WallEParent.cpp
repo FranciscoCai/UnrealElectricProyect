@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 // Add this include at the top of your file, after other includes
 #include "WallEParent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -9,7 +9,7 @@
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/PlayerController.h"
 #include "Cameras/MainCamera.h"
-#include "Panels/ElectricPanel_RobotStation.h" // Asegur¨¢te de incluir la cabecera
+#include "Panels/ElectricPanel_RobotStation.h" // AsegurÃ¡te de incluir la cabecera
 #include "Panels/ElectricPanelPickable.h"
 #include "Components/PrimitiveComponent.h"
 #include "Camera/CameraComponent.h"
@@ -26,12 +26,9 @@ AWallEParent::AWallEParent()
 
 	HeldPanel = nullptr;
 
-	// Desactiva la rotaci¨®n autom¨¢tica
+	// Desactiva la rotaciÃ³n automÃ¡tica
 	bUseControllerRotationYaw = false;
-	if (GetCharacterMovement())
-	{
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-	}
+	// NO configurar CharacterMovement aquÃ­ - aÃºn no existe
 }
 
 // Called when the game starts or when spawned
@@ -53,12 +50,37 @@ void AWallEParent::BeginPlay()
 			break;
 		}
 	}
+
+	// Configurar inercia de frenado AQUÃ (cuando CharacterMovement ya existe)
+	if (UCharacterMovementComponent* CharMovement = GetCharacterMovement())
+	{
+		CharMovement->bOrientRotationToMovement = false;
+		
+		// ConfiguraciÃ³n de inercia MÃS NOTORIA
+		CharMovement->BrakingDecelerationWalking = 600.0f; // MÃ¡s bajo = frenado mÃ¡s lento
+		CharMovement->GroundFriction = 2.0f; // MÃ¡s bajo = mÃ¡s deslizamiento
+		CharMovement->bUseSeparateBrakingFriction = true;
+		CharMovement->BrakingFriction = 0.5f; // MÃ¡s bajo = mÃ¡s inercia
+		CharMovement->MaxWalkSpeed = 600.0f; // Velocidad mÃ¡xima (opcional, ajusta segÃºn necesites)
+	}
 }
 
 // Called every frame
 void AWallEParent::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// Actualizar MovementSpeed basado en la velocidad real del CharacterMovement
+	if (UCharacterMovementComponent* CharMovement = GetCharacterMovement())
+	{
+		FVector Velocity = CharMovement->Velocity;
+		Velocity.Z = 0.0f; // Ignorar componente vertical
+		float CurrentSpeed = Velocity.Size();
+		float MaxSpeed = CharMovement->MaxWalkSpeed;
+		
+		// Normalizar MovementSpeed [0-1] basado en la velocidad actual
+		MovementSpeed = (MaxSpeed > 0.0f) ? (CurrentSpeed / MaxSpeed) : 0.0f;
+	}
 
 	if (CameraToChange)
 	{
@@ -70,7 +92,7 @@ void AWallEParent::Tick(float DeltaTime)
 				FRotator CameraRot = FollowCam->GetComponentRotation();
 				FRotator TargetRot(0.f, CameraRot.Yaw, 0.f);
 
-				// Interpolaci¨®n suave
+				// InterpolaciÃ³n suave
 				CurrentInterpRotation = FMath::RInterpTo(CurrentInterpRotation, TargetRot, DeltaTime, 10.0f);
 				SetActorRotation(CurrentInterpRotation);
 			}
@@ -87,7 +109,7 @@ void AWallEParent::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		if (MoveAction)
 		{
 			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AWallEParent::Move);
-			// Nuevo binding para poner MovementSpeed a cero al soltar el bot¨®n
+			// Nuevo binding para poner MovementSpeed a cero al soltar el botÃ³n
 			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Completed, this, &AWallEParent::OnMoveReleased);
 		}
 		if (InteractStation)
@@ -172,10 +194,11 @@ void AWallEParent::Move(const FInputActionValue& Value)
     float ForwardValue = MovementVector.Y;
     float RightValue = MovementVector.X;
 
-    // Actualiza la direcci¨®n de movimiento
+    // Actualiza la direcciÃ³n de movimiento
     MovementDirection = MovementVector;
 
-    MovementSpeed = FMath::Abs(ForwardValue) + FMath::Abs(RightValue);
+    // NO actualizar MovementSpeed aquÃ­ - se actualiza en Tick() segÃºn velocidad real
+    // MovementSpeed = FMath::Abs(ForwardValue) + FMath::Abs(RightValue); // ELIMINAR
 
     FRotator YawRot = GetActorRotation();
     FVector ForwardDir = FRotationMatrix(YawRot).GetUnitAxis(EAxis::X);
@@ -189,12 +212,12 @@ void AWallEParent::Move(const FInputActionValue& Value)
     {
         AddMovementInput(RightDir, RightValue);
     }
-    // NO cambies la rotaci¨®n aqu¨ª
+    // NO cambies la rotaciÃ³n aquÃ­
 }
 
 void AWallEParent::DoMove(float Right, float Forward)
 {
-	// ÒÑÆúÓÃ»òÁô¿Õ£¬·ÀÖ¹Á´½Ó´íÎó
+	// å·²å¼ƒç”¨æˆ–ç•™ç©ºï¼Œé˜²æ­¢é“¾æŽ¥é”™è¯¯
 }
 
 void AWallEParent::BeginInteractStation()
@@ -273,12 +296,12 @@ void AWallEParent::OnPickUpOrDownStarted()
 	}
 	if (HeldPanel)
 	{
-		// Si ya est¨¢ sosteniendo un panel, suelta
+		// Si ya estÃ¡ sosteniendo un panel, suelta
 		OnPickDownStarted();
 	}
 	else
 	{
-		// Si no est¨¢ sosteniendo nada, recoge
+		// Si no estÃ¡ sosteniendo nada, recoge
 		OnPickUpStarted();
 	}
 }
@@ -485,7 +508,7 @@ void AWallEParent::OnPressQ()
 
 void AWallEParent::OnMoveReleased(const FInputActionValue& Value)
 {
-	MovementSpeed = 0.0f;
+	//MovementSpeed = 0.0f;
 }
 
 void AWallEParent::OnLookInput(const FInputActionValue& Value)
