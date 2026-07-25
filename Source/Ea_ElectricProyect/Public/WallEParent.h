@@ -48,7 +48,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputMappingContext* WallEMappingContext;
 
-	/** Acción de movimiento (Vector2D) */
+	/** Acci¨®n de movimiento (Vector2D) */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MoveAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
@@ -70,7 +70,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void DoMove(float Right, float Forward);
 
-	// --- Hold-to-interact para la estación (equivalente a ElectricPanel) ---
+	// --- Hold-to-interact para la estaci¨®n (equivalente a ElectricPanel) ---
 	// Called when the hold completes (children/blueprints can call/override if needed)
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	virtual void OnInteractStation();
@@ -149,6 +149,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pick")
 	float PickElapsedTime = 0.0f;
+
+	/** Maximum look rotation speed (degrees per second) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (ClampMin = "0.0"))
+	float MaxLookSpeed = 180.0f;
 
 protected:
 	/** Called por Enhanced Input cuando se recibe WallELook (Vector2D) */

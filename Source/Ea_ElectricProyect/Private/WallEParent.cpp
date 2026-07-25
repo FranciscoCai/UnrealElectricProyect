@@ -517,7 +517,26 @@ void AWallEParent::OnLookInput(const FInputActionValue& Value)
     {
         if (AWallECamera* WallECam = Cast<AWallECamera>(CameraToChange))
         {
-            WallECam->AddOrbitInput(Value.Get<FVector2D>());
+            FVector2D LookInput = Value.Get<FVector2D>();
+            
+            // Limitar la velocidad de giro basado en MaxLookSpeed (grados por segundo)
+            if (MaxLookSpeed > 0.0f)
+            {
+                // Obtener DeltaTime del mundo
+                float DeltaTime = GetWorld() ? GetWorld()->GetDeltaSeconds() : 0.016f;
+                
+                // Calcular la velocidad máxima permitida este frame
+                float MaxInputThisFrame = MaxLookSpeed * DeltaTime;
+                
+                float InputMagnitude = LookInput.Size();
+                if (InputMagnitude > MaxInputThisFrame)
+                {
+                    // Normalizar y escalar al máximo permitido este frame
+                    LookInput = LookInput.GetSafeNormal() * MaxInputThisFrame;
+                }
+            }
+            
+            WallECam->AddOrbitInput(LookInput);
         }
     }
 }
