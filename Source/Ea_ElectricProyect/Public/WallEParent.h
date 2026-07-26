@@ -153,6 +153,10 @@ public:
 	/** Maximum look rotation speed (degrees per second) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (ClampMin = "0.0"))
 	float MaxLookSpeed = 180.0f;
+	UFUNCTION(BlueprintImplementableEvent, Category = "Input")
+	void BPPickUp();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Input")
+	void BPPickDown();
 
 protected:
 	/** Called por Enhanced Input cuando se recibe WallELook (Vector2D) */

@@ -363,6 +363,7 @@ void AWallEParent::OnPickUpStarted()
 
 	if (pickablePanel)
 	{
+		BPPickUp();
 		// If the panel was placed on a station, clear the station's reference to it
 		if (pickablePanel->ElectricPanelStationOn)
 		{
@@ -465,6 +466,7 @@ void AWallEParent::OnPickDownStarted()
 			{
 				continue;
 			}
+			BPPickDown();
 			HeldPanel->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 			bPickTransition = true;
 			bPick = false;
